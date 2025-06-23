@@ -9,12 +9,11 @@ package chess;
 public class ChessBoard {
 
     public ChessBoard() {
-        
     }
 
     /**
      * Adds a chess piece to the chessboard
-     *
+     * MINOR CHANGE
      * @param position where to add the piece to
      * @param piece    the piece to add
      */

@@ -9,8 +9,11 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-
-    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+private PieceType type;
+private ChessGame.TeamColor pieceColor;
+    public ChessPiece(ChessGame.TeamColor newPieceColor, ChessPiece.PieceType newType) {
+    type = newType;
+    pieceColor = newPieceColor;
     }
 
     /**
@@ -22,7 +25,8 @@ public class ChessPiece {
         BISHOP,
         KNIGHT,
         ROOK,
-        PAWN
+        PAWN,
+        NULL
     }
 
     /**
@@ -36,7 +40,7 @@ public class ChessPiece {
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+        return type;
     }
 
     /**

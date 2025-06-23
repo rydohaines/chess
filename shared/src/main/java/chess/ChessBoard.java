@@ -1,5 +1,7 @@
 package chess;
 
+import static chess.ChessPiece.PieceType.*;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -7,8 +9,9 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
-
+public ChessPiece[][] board;
     public ChessBoard() {
+        ChessPiece[][] board = new ChessPiece[8][8];
     }
 
     /**
@@ -18,7 +21,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        board[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -29,7 +32,27 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        if(board[position.getRow()][position.getColumn()].getPieceType() == KING){
+            return KING;
+        }
+        if(board[position.getRow()][position.getColumn()] == QUEEN){
+            return QUEEN;
+        }
+        if(board[position.getRow()][position.getColumn()] == BISHOP){
+            return BISHOP;
+        }
+        if(board[position.getRow()][position.getColumn()] == KNIGHT){
+            return KNIGHT;
+        }
+        if(board[position.getRow()][position.getColumn()] == ROOK){
+            return ROOK;
+        }
+        if(board[position.getRow()][position.getColumn()] == PAWN){
+            return PAWN;
+        }
+        else{
+            return NULL;
+            }
     }
 
     /**

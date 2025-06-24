@@ -1,5 +1,6 @@
 package chess;
 
+import static chess.ChessGame.TeamColor.WHITE;
 import static chess.ChessPiece.PieceType.*;
 
 /**
@@ -9,9 +10,8 @@ import static chess.ChessPiece.PieceType.*;
  * signature of the existing methods.
  */
 public class ChessBoard {
-public ChessPiece[][] board;
+private ChessPiece[][] board = new ChessPiece[8][8];
     public ChessBoard() {
-        ChessPiece[][] board = new ChessPiece[8][8];
     }
 
     /**
@@ -21,7 +21,7 @@ public ChessPiece[][] board;
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        board[position.getRow()][position.getColumn()] = piece;
+        board[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
     /**
@@ -32,27 +32,7 @@ public ChessPiece[][] board;
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        if(board[position.getRow()][position.getColumn()].getPieceType() == KING){
-            return KING;
-        }
-        if(board[position.getRow()][position.getColumn()] == QUEEN){
-            return QUEEN;
-        }
-        if(board[position.getRow()][position.getColumn()] == BISHOP){
-            return BISHOP;
-        }
-        if(board[position.getRow()][position.getColumn()] == KNIGHT){
-            return KNIGHT;
-        }
-        if(board[position.getRow()][position.getColumn()] == ROOK){
-            return ROOK;
-        }
-        if(board[position.getRow()][position.getColumn()] == PAWN){
-            return PAWN;
-        }
-        else{
-            return NULL;
-            }
+       return board[position.getRow()-1][position.getColumn()-1];
     }
 
     /**
@@ -60,6 +40,6 @@ public ChessPiece[][] board;
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+
     }
 }

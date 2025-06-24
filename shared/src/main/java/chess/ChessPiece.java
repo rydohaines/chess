@@ -52,7 +52,9 @@ private ChessGame.TeamColor pieceColor;
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        if(type == PieceType.KING){
+            return KingMovesCalculator.pieceMoves(board,myPosition);
+        }
     }
 
     @Override

@@ -67,4 +67,19 @@ private ChessPiece[][] board = new ChessPiece[8][8];
         addPiece(new ChessPosition(7,i), new ChessPiece(BLACK,PAWN));
     }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ChessBoard that = (ChessBoard) o;
+        return Arrays.deepEquals(board, that.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(board);
+    }
 }

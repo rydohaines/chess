@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Objects;
+
 /**
  * Represents moving a chess piece on a chessboard
  * <p>
@@ -7,23 +9,28 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessMove {
-
+    private ChessPosition startingPos;
+    private ChessPosition endingPos;
+    private ChessPiece.PieceType promotionPiece;
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
-                     ChessPiece.PieceType promotionPiece) {
+                     ChessPiece.PieceType tempPromotionPiece) {
+    startingPos = startPosition;
+    endingPos = endPosition;
+    promotionPiece = tempPromotionPiece;
     }
 
     /**
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
-        throw new RuntimeException("Not implemented");
+        return startingPos;
     }
 
     /**
      * @return ChessPosition of ending location
      */
     public ChessPosition getEndPosition() {
-        throw new RuntimeException("Not implemented");
+        return endingPos;
     }
 
     /**
@@ -33,6 +40,24 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
-        throw new RuntimeException("Not implemented");
+        return promotionPiece;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ChessMove chessMove = (ChessMove) o;
+        return Objects.equals(startingPos, chessMove.startingPos) && Objects.equals(endingPos, chessMove.endingPos) && promotionPiece == chessMove.promotionPiece;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(startingPos);
+        result = 31 * result + Objects.hashCode(endingPos);
+        result = 31 * result + Objects.hashCode(promotionPiece);
+        return result;
     }
 }

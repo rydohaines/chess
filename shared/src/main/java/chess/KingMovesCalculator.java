@@ -1,30 +1,41 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class KingMovesCalculator implements PieceMovesCalculator{
-    private Collection<ChessMove> validMoves;
+    private Collection<ChessMove> validMoves = new ArrayList<>(0);
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
-    ChessPosition forwardOne = new ChessPosition(position.getRow()+1, position.getColumn());
-    ChessPosition backwardsOne = new ChessPosition(position.getRow()-1, position.getColumn());
-    ChessPosition rightOne = new ChessPosition(position.getRow(), position.getColumn()+1);
-    ChessPosition leftOne = new ChessPosition(position.getRow(), position.getColumn()-1);
+    ChessPosition forwardOne = position.upOne();
+    ChessPosition backwardsOne = position.downOne();
+    ChessPosition leftOne = position.leftOne();
+    ChessPosition rightOne = position.rightOne();
     if(board.getPiece(position.positiveDiagonal()) == null || board.getPiece(position.positiveDiagonal()).getTeamColor() != board.getPiece(position).getTeamColor()){
-            validMoves.add(new ChessMove(position, position.positiveDiagonal(),null))
+            validMoves.add(new ChessMove(position, position.positiveDiagonal(),null));
     }
-    if(board.getPiece(position.negativeDiagonal())){
-
+    if(board.getPiece(position.negativeDiagonal()) == null ||board.getPiece(position.negativeDiagonal()).getTeamColor() !=board.getPiece(position).getTeamColor()){
+        validMoves.add(new ChessMove(position,position.negativeDiagonal(),null));
     }
-    if(board.getPiece(position.leftUpDiagonal())){
-
+    if(board.getPiece(position.leftUpDiagonal()) == null || board.getPiece(position.leftUpDiagonal()).getTeamColor() != board.getPiece(position).getTeamColor() ){
+        validMoves.add(new ChessMove(position,position.leftUpDiagonal(),null));
     }
-    if(board.getPiece(position.rightDownDiagonal())){
-
+    if(board.getPiece(position.rightDownDiagonal()) == null || (board.getPiece(position.rightDownDiagonal()).getTeamColor() != (board.getPiece(position).getTeamColor()))){
+        validMoves.add(new ChessMove(position,position.rightDownDiagonal(),null));
     }
-    if(board.getPiece(forwardOne) == null){
+    if(board.getPiece(forwardOne) == null || board.getPiece(forwardOne).getTeamColor() != board.getPiece(position).getTeamColor()){
         validMoves.add(new ChessMove(position, forwardOne,null));
     }
+    if(board.getPiece(backwardsOne) == null || board.getPiece(backwardsOne).getTeamColor() != board.getPiece(position).getTeamColor()){
+            validMoves.add(new ChessMove(position,backwardsOne,null));
+    }
+    if(board.getPiece(rightOne) == null || board.getPiece(rightOne).getTeamColor() != board.getPiece(position).getTeamColor()){
+            validMoves.add(new ChessMove(position, rightOne,null));
+    }
+    if(board.getPiece(leftOne) == null || board.getPiece(leftOne).getTeamColor() != board.getPiece(position).getTeamColor()){
+            validMoves.add(new ChessMove(position, leftOne,null));
+    }
+    return validMoves;
     }
 }

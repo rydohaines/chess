@@ -22,16 +22,53 @@ private int col;
         return row;
     }
     public ChessPosition positiveDiagonal() {
+        if(row+1 > 8 || col+1 > 8 ){
+            return new ChessPosition(row,col);
+        }
         return new ChessPosition(row+1,col+1);
     }
     public ChessPosition negativeDiagonal(){
+        if(row-1 < 1 || col-1 < 1){
+            return new ChessPosition(row,col);
+        }
         return new ChessPosition(row-1,col-1);
     }
     public ChessPosition leftUpDiagonal(){
+        if(row+1 > 8 || col-1 <1){
+            return new ChessPosition(row,col);
+        }
         return new ChessPosition(row+1,col-1);
     }
     public ChessPosition rightDownDiagonal(){
+        if(row - 1 < 1 || col+1 > 8){
+            return new ChessPosition(row,col);
+        }
         return new ChessPosition(row-1,col+1);
+    }
+    public ChessPosition upOne(){
+        if(row + 1 > 8){
+            return new ChessPosition(row,col);
+        }
+        return new ChessPosition(row+1,col);
+    }
+    public ChessPosition downOne(){
+        if(row-1 < 1){
+            return new ChessPosition(row,col);
+        }
+        return new ChessPosition(row-1,col);
+    }
+    public ChessPosition rightOne(){
+        if(col+1 > 8){
+            return new ChessPosition(row,col);
+        }
+        return new ChessPosition(row,col+1);
+
+    }
+    public ChessPosition leftOne(){
+        if(col-1 < 1){
+            return new ChessPosition(row,col);
+        }
+        return new ChessPosition(row,col-1);
     }
     /**
      * @return which column this position is in

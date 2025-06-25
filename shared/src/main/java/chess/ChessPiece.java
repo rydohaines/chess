@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -53,8 +54,10 @@ private ChessGame.TeamColor pieceColor;
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         if(type == PieceType.KING){
-            return KingMovesCalculator.pieceMoves(board,myPosition);
+            PieceMovesCalculator calc = new KingMovesCalculator();
+            return calc.pieceMoves(board,myPosition);
         }
+        else return Collections.emptyList();
     }
 
     @Override

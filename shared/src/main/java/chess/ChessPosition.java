@@ -21,7 +21,18 @@ private int col;
     public int getRow() {
         return row;
     }
-
+    public ChessPosition positiveDiagonal() {
+        return new ChessPosition(row+1,col+1);
+    }
+    public ChessPosition negativeDiagonal(){
+        return new ChessPosition(row-1,col-1);
+    }
+    public ChessPosition leftUpDiagonal(){
+        return new ChessPosition(row+1,col-1);
+    }
+    public ChessPosition rightDownDiagonal(){
+        return new ChessPosition(row-1,col+1);
+    }
     /**
      * @return which column this position is in
      * 1 codes for the left row

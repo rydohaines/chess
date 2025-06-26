@@ -69,6 +69,10 @@ private ChessGame.TeamColor pieceColor;
             PieceMovesCalculator rook = new RookMovesCalculator();
             return rook.pieceMoves(board,myPosition);
         }
+        if(type == PieceType.BISHOP){
+            PieceMovesCalculator bishop = new BishopMovesCalculator();
+            return bishop.pieceMoves(board,myPosition);
+        }
         else return Collections.emptyList();
     }
 

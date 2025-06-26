@@ -23,25 +23,25 @@ private int col;
     }
     public ChessPosition positiveDiagonal() {
         if(row+1 > 8 || col+1 > 8 ){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row+1,col+1);
     }
     public ChessPosition negativeDiagonal(){
         if(row-1 < 1 || col-1 < 1){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row-1,col-1);
     }
     public ChessPosition leftUpDiagonal(){
         if(row+1 > 8 || col-1 <1){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row+1,col-1);
     }
     public ChessPosition rightDownDiagonal(){
         if(row - 1 < 1 || col+1 > 8){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row-1,col+1);
     }

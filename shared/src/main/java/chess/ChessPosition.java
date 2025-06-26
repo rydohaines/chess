@@ -47,26 +47,26 @@ private int col;
     }
     public ChessPosition upOne(){
         if(row + 1 > 8){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row+1,col);
     }
     public ChessPosition downOne(){
         if(row-1 < 1){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row-1,col);
     }
     public ChessPosition rightOne(){
         if(col+1 > 8){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row,col+1);
 
     }
     public ChessPosition leftOne(){
         if(col-1 < 1){
-            return new ChessPosition(row,col);
+            return null;
         }
         return new ChessPosition(row,col-1);
     }

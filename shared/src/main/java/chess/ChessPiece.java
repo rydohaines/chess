@@ -61,6 +61,10 @@ private ChessGame.TeamColor pieceColor;
             PieceMovesCalculator pawn = new PawnMovesCalculator();
             return pawn.pieceMoves(board,myPosition);
         }
+        if(type == PieceType.KNIGHT){
+            PieceMovesCalculator knight = new KnightMovesCalculator();
+            return knight.pieceMoves(board,myPosition);
+        }
         else return Collections.emptyList();
     }
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class KnightMovesCalculator implements PieceMovesCalculator{
-    private Collection<ChessMove> validMoves = new ArrayList<>();
+    private final Collection<ChessMove> validMoves = new ArrayList<>();
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
         ChessGame.TeamColor pieceColor = board.getPiece(position).getTeamColor();

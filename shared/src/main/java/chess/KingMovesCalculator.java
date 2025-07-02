@@ -12,38 +12,39 @@ public class KingMovesCalculator implements PieceMovesCalculator{
     ChessPosition backwardsOne = position.downOne();
     ChessPosition leftOne = position.leftOne();
     ChessPosition rightOne = position.rightOne();
+    ChessGame.TeamColor pieceColor = board.getPiece(position).getTeamColor();
     if(position.positiveDiagonal() != null) {
-        if (board.getPiece(position.positiveDiagonal()) == null || board.getPiece(position.positiveDiagonal()).getTeamColor() != board.getPiece(position).getTeamColor()) {
+        if (board.getPiece(position.positiveDiagonal()) == null || board.getPiece(position.positiveDiagonal()).getTeamColor() != pieceColor) {
             validMoves.add(new ChessMove(position, position.positiveDiagonal(), null));
         }
     }
     if(position.negativeDiagonal() != null) {
-        if (board.getPiece(position.negativeDiagonal()) == null || board.getPiece(position.negativeDiagonal()).getTeamColor() != board.getPiece(position).getTeamColor()) {
+        if (board.getPiece(position.negativeDiagonal()) == null || board.getPiece(position.negativeDiagonal()).getTeamColor() != pieceColor) {
             validMoves.add(new ChessMove(position, position.negativeDiagonal(), null));
         }
     }
     if(position.leftUpDiagonal()!= null) {
-        if (board.getPiece(position.leftUpDiagonal()) == null || board.getPiece(position.leftUpDiagonal()).getTeamColor() != board.getPiece(position).getTeamColor()) {
+        if (board.getPiece(position.leftUpDiagonal()) == null || board.getPiece(position.leftUpDiagonal()).getTeamColor() != pieceColor) {
             validMoves.add(new ChessMove(position, position.leftUpDiagonal(), null));
         }
     }
     if(position.rightDownDiagonal()!= null) {
-        if (board.getPiece(position.rightDownDiagonal()) == null || (board.getPiece(position.rightDownDiagonal()).getTeamColor() != (board.getPiece(position).getTeamColor()))) {
+        if (board.getPiece(position.rightDownDiagonal()) == null || (board.getPiece(position.rightDownDiagonal()).getTeamColor() != pieceColor)) {
             validMoves.add(new ChessMove(position, position.rightDownDiagonal(), null));
         }
     }
     if(forwardOne != null) {
-        if (board.getPiece(forwardOne) == null || board.getPiece(forwardOne).getTeamColor() != board.getPiece(position).getTeamColor()) {
+        if (board.getPiece(forwardOne) == null || board.getPiece(forwardOne).getTeamColor() != pieceColor) {
             validMoves.add(new ChessMove(position, forwardOne, null));
         }
     }
     if(backwardsOne != null) {
-        if (board.getPiece(backwardsOne) == null || board.getPiece(backwardsOne).getTeamColor() != board.getPiece(position).getTeamColor()) {
+        if (board.getPiece(backwardsOne) == null || board.getPiece(backwardsOne).getTeamColor() != pieceColor) {
             validMoves.add(new ChessMove(position, backwardsOne, null));
         }
     }
     if(rightOne != null) {
-        if (board.getPiece(rightOne) == null || board.getPiece(rightOne).getTeamColor() != board.getPiece(position).getTeamColor()) {
+        if (board.getPiece(rightOne) == null || board.getPiece(rightOne).getTeamColor() != pieceColor) {
             validMoves.add(new ChessMove(position, rightOne, null));
         }
     }

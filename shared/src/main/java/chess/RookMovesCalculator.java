@@ -2,59 +2,31 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
 public class RookMovesCalculator implements PieceMovesCalculator{
-    private Collection<ChessMove> validMoves = new ArrayList<>(0);
+    Collection<ChessMove> validMoves = new ArrayList<>();
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition position) {
-    ChessPosition incrementer = position.upOne();
-    while(incrementer != null){
-        if(board.getPiece(incrementer) == null) {
-            validMoves.add(new ChessMove(position, incrementer, null));
+        ChessGame.TeamColor pieceColor = board.getPiece(position).getTeamColor();
+        List<Function<ChessPosition,ChessPosition>> directions = List.of(
+                ChessPosition::upOne,ChessPosition::downOne,ChessPosition::rightOne,ChessPosition::leftOne
+        );
+        for(Function<ChessPosition,ChessPosition> direction : directions){
+            ChessPosition endPos = direction.apply(position);
+            while(endPos != null){
+                if(board.getPiece(endPos) == null){
+                    validMoves.add(new ChessMove(position,endPos,null));
+                }else if(board.getPiece(endPos).getTeamColor() != pieceColor){
+                    validMoves.add(new ChessMove(position,endPos,null));
+                    break;
+                }
+                else break;
+                endPos = direction.apply(endPos);
+            }
         }
-        else if(board.getPiece(incrementer).getTeamColor() != board.getPiece(position).getTeamColor()){
-            validMoves.add(new ChessMove(position,incrementer,null));
-            break;
-        }
-        else break;
-        incrementer = incrementer.upOne();
-    }
-    incrementer = position.downOne();
-        while(incrementer != null) {
-            if (board.getPiece(incrementer) == null) {
-                validMoves.add(new ChessMove(position, incrementer, null));
-            }
-            else if (board.getPiece(incrementer).getTeamColor() != board.getPiece(position).getTeamColor()) {
-                validMoves.add(new ChessMove(position, incrementer, null));
-                break;
-            }
-            else break;
-            incrementer = incrementer.downOne();
-        }
-        incrementer = position.rightOne();
-        while(incrementer != null) {
-            if (board.getPiece(incrementer) == null) {
-                validMoves.add(new ChessMove(position, incrementer, null));
-            }
-            else if (board.getPiece(incrementer).getTeamColor() != board.getPiece(position).getTeamColor()) {
-                validMoves.add(new ChessMove(position, incrementer, null));
-                break;
-            }
-            else break;
-            incrementer = incrementer.rightOne();
-        }
-        incrementer = position.leftOne();
-        while(incrementer != null) {
-            if (board.getPiece(incrementer) == null) {
-                validMoves.add(new ChessMove(position, incrementer, null));
-            }
-            else if (board.getPiece(incrementer).getTeamColor() != board.getPiece(position).getTeamColor()) {
-                validMoves.add(new ChessMove(position, incrementer, null));
-                break;
-            }
-            else break;
-            incrementer = incrementer.leftOne();
-        }
-    return validMoves;
+        return validMoves;
     }
 }
+

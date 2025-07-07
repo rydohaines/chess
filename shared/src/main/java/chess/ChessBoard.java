@@ -28,6 +28,9 @@ private final ChessPiece[][] board = new ChessPiece[8][8];
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1] = piece;
     }
+    public void setNull(ChessPosition position){
+        board[position.getRow()-1][position.getColumn()-1] = null;
+    }
 
     /**
      * Gets a chess piece on the chessboard

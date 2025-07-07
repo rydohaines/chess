@@ -27,8 +27,7 @@ private final ChessGame.TeamColor pieceColor;
         BISHOP,
         KNIGHT,
         ROOK,
-        PAWN,
-        NULL
+        PAWN
     }
 
     /**

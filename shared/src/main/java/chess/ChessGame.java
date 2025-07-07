@@ -108,7 +108,7 @@ private TeamColor turnColor;
             for(int j = 1; j<=8; ++j){
                 ChessPosition currPos = new ChessPosition(i,j);
                 if(gameBoard.getPiece(currPos)!= null && gameBoard.getPiece(currPos).getTeamColor() != teamColor){
-    opponentMoves.addAll(gameBoard.getPiece(currPos).pieceMoves(gameBoard,currPos));
+                    opponentMoves.addAll(gameBoard.getPiece(currPos).pieceMoves(gameBoard,currPos));
                 }
             }
         }
@@ -121,10 +121,13 @@ private TeamColor turnColor;
     }
 
     public ChessPosition findKingPosition(TeamColor teamColor, ChessBoard board){
+        ChessPiece teamKing = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
         for(int i = 1; i <= 8; ++i){
             for(int j = 1; j <=8; ++j){
-                if(Objects.equals(board.getPiece(new ChessPosition(i, j)), new ChessPiece(teamColor, ChessPiece.PieceType.KING))){
-                    return new ChessPosition(i,j);
+                if(board.getPiece(new ChessPosition(i,j)) != null){
+                    if(board.getPiece(new ChessPosition(i,j)) == teamKing) {
+                        return new ChessPosition(i, j);
+                    }
                 }
             }
         }
@@ -137,7 +140,7 @@ private TeamColor turnColor;
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return false;
     }
 
     /**
@@ -148,7 +151,7 @@ private TeamColor turnColor;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+return false;
     }
 
     /**

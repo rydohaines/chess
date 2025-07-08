@@ -51,18 +51,27 @@ private TeamColor turnColor;
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        if(gameBoard.getPiece(startPosition) == null){
+        if (gameBoard.getPiece(startPosition) == null) {
             return null;
         }
         ChessPiece currPiece = gameBoard.getPiece(startPosition);
         TeamColor pieceColor = currPiece.getTeamColor();
         Collection<ChessMove> validMoves = new ArrayList<>();
-        Collection<ChessMove> pieceMoves = gameBoard.getPiece(startPosition).pieceMoves(gameBoard,startPosition);
-        for(ChessMove move : pieceMoves){
-            if(!isInCheck(pieceColor)){
+        Collection<ChessMove> pieceMoves = currPiece.pieceMoves(gameBoard, startPosition);
+        for (ChessMove move : pieceMoves) {
+            ChessBoard tempBoard = gameBoard.deepCopy();
+            if(move.getPromotionPiece() != null){
+                gameBoard.addPiece(move.getEndPosition(),new ChessPiece(pieceColor,move.getPromotionPiece()));
+            }else {
+                gameBoard.addPiece(move.getEndPosition(), currPiece);
+            }
+            gameBoard.setNull(move.getStartPosition());
+            if (!isInCheck(pieceColor)) {
                 validMoves.add(move);
             }
+            setBoard(tempBoard);
         }
+
         return validMoves;
     }
 

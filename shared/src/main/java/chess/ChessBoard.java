@@ -28,7 +28,20 @@ private final ChessPiece[][] board = new ChessPiece[8][8];
     public void addPiece(ChessPosition position, ChessPiece piece) {
         board[position.getRow()-1][position.getColumn()-1] = piece;
     }
-    public void setNull(ChessPosition position){
+    public ChessBoard deepCopy() {
+        ChessBoard newBoard = new ChessBoard();
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition pos = new ChessPosition(i, j);
+                ChessPiece piece = getPiece(pos);
+                if (piece != null) {
+                    newBoard.addPiece(pos, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
+                }
+            }
+        }
+        return newBoard;
+    }
+        public void setNull(ChessPosition position){
         board[position.getRow()-1][position.getColumn()-1] = null;
     }
 
@@ -85,4 +98,5 @@ private final ChessPiece[][] board = new ChessPiece[8][8];
     public int hashCode() {
         return Arrays.deepHashCode(board);
     }
+
 }

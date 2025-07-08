@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -134,7 +133,6 @@ private TeamColor turnColor;
     }
 
     public ChessPosition findKingPosition(TeamColor teamColor, ChessBoard board){
-        ChessPiece teamKing = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
         for(int i = 1; i <= 8; ++i){
             for(int j = 1; j <=8; ++j){
                 if(board.getPiece(new ChessPosition(i,j)) != null){
@@ -156,10 +154,7 @@ private TeamColor turnColor;
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         Collection<ChessMove> validMoves = allValidMoves(teamColor);
-        if(validMoves.isEmpty() && isInCheck(teamColor)){
-            return true;
-        }
-        else {return false;}
+        return validMoves.isEmpty() && isInCheck(teamColor);
     }
 
 
@@ -172,10 +167,7 @@ private TeamColor turnColor;
      */
     public boolean isInStalemate(TeamColor teamColor) {
         Collection<ChessMove> validMoves = allValidMoves(teamColor);
-        if(validMoves.isEmpty() && !isInCheck(teamColor)){
-            return true;
-        }
-        else {return false;}
+        return validMoves.isEmpty() && !isInCheck(teamColor);
     }
     Collection<ChessMove> allValidMoves(TeamColor teamColor){
         Collection<ChessMove> validMoves = new ArrayList<>();

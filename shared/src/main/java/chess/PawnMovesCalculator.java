@@ -13,18 +13,16 @@ public class PawnMovesCalculator implements PieceMovesCalculator{
                     position.positiveDiagonal(),position.leftUpDiagonal()
             };
             for(ChessPosition endingPos : endPos){
-                if(endingPos != null){
-                    if(board.getPiece(endingPos) != null ){
-                        if(board.getPiece(endingPos).getTeamColor() != pieceColor){
+                if(endingPos != null && board.getPiece(endingPos) != null && board.getPiece(endingPos).getTeamColor() != pieceColor){
                             if(endingPos.getRow() == 8){
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.QUEEN));
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.KNIGHT));
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.BISHOP));
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.ROOK));
                             }
-                            else validMoves.add(new ChessMove(position,endingPos,null));
-                        }
-                    }
+                            else {
+                                validMoves.add(new ChessMove(position,endingPos,null));
+                            }
                 }
             }
             if(position.upOne()!= null){
@@ -34,7 +32,9 @@ public class PawnMovesCalculator implements PieceMovesCalculator{
                         validMoves.add(new ChessMove(position,position.upOne(), ChessPiece.PieceType.KNIGHT));
                         validMoves.add(new ChessMove(position,position.upOne(), ChessPiece.PieceType.BISHOP));
                         validMoves.add(new ChessMove(position,position.upOne(), ChessPiece.PieceType.ROOK));
-                    }else validMoves.add(new ChessMove(position,position.upOne(),null));
+                    }else {
+                        validMoves.add(new ChessMove(position,position.upOne(),null));
+                    }
                     if(position.getRow() == 2 && board.getPiece(position.upOne().upOne()) == null){
                         validMoves.add(new ChessMove(position,position.upOne().upOne(),null));
                     }
@@ -46,18 +46,16 @@ public class PawnMovesCalculator implements PieceMovesCalculator{
                     position.negativeDiagonal(),position.rightDownDiagonal()
             };
             for(ChessPosition endingPos : endPos){
-                if(endingPos != null){
-                    if(board.getPiece(endingPos) != null ){
-                        if(board.getPiece(endingPos).getTeamColor() != pieceColor){
+                if(endingPos != null && board.getPiece(endingPos) != null && board.getPiece(endingPos).getTeamColor() != pieceColor){
                             if(endingPos.getRow() == 1){
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.QUEEN));
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.KNIGHT));
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.BISHOP));
                                 validMoves.add(new ChessMove(position,endingPos, ChessPiece.PieceType.ROOK));
                             }
-                            else validMoves.add(new ChessMove(position,endingPos,null));
-                        }
-                    }
+                            else{
+                                validMoves.add(new ChessMove(position,endingPos,null));
+                            }
                 }
             }
             if(position.downOne()!= null){
@@ -67,7 +65,9 @@ public class PawnMovesCalculator implements PieceMovesCalculator{
                         validMoves.add(new ChessMove(position,position.downOne(), ChessPiece.PieceType.KNIGHT));
                         validMoves.add(new ChessMove(position,position.downOne(), ChessPiece.PieceType.BISHOP));
                         validMoves.add(new ChessMove(position,position.downOne(), ChessPiece.PieceType.ROOK));
-                    }else validMoves.add(new ChessMove(position,position.downOne(),null));
+                    }else{
+                        validMoves.add(new ChessMove(position,position.downOne(),null));
+                    }
                     if(position.getRow() == 7 && board.getPiece(position.downOne().downOne()) == null){
                         validMoves.add(new ChessMove(position,position.downOne().downOne(),null));
                     }

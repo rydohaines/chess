@@ -76,7 +76,9 @@ private final ChessGame.TeamColor pieceColor;
             PieceMovesCalculator queen = new QueenMovesCalculator();
             return queen.pieceMoves(board,myPosition);
         }
-        else return Collections.emptyList();
+        else{
+            return Collections.emptyList();
+        }
     }
 
     @Override

@@ -22,7 +22,9 @@ public class RookMovesCalculator implements PieceMovesCalculator{
                     validMoves.add(new ChessMove(position,endPos,null));
                     break;
                 }
-                else break;
+                else{
+                    break;
+                }
                 endPos = direction.apply(endPos);
             }
         }

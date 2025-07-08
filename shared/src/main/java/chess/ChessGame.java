@@ -155,8 +155,22 @@ private TeamColor turnColor;
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        return false;
+        Collection<ChessMove> validMoves = new ArrayList<>();
+        for(int i = 1; i<=8; ++i){
+            for(int j = 1; j<= 8; ++j){
+                ChessPosition currPos = new ChessPosition(i,j);
+                ChessPiece currPiece = gameBoard.getPiece(currPos);
+                if(currPiece != null && currPiece.getTeamColor() == teamColor){
+                    validMoves.addAll(this.validMoves(currPos));
+                }
+            }
+        }
+        if(validMoves.isEmpty() && isInCheck(teamColor)){
+            return true;
+        }
+        else {return false;}
     }
+
 
     /**
      * Determines if the given team is in stalemate, which here is defined as having
@@ -166,7 +180,20 @@ private TeamColor turnColor;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-return false;
+        Collection<ChessMove> validMoves = new ArrayList<>();
+        for(int i = 1; i<=8; ++i){
+            for(int j = 1; j<= 8; ++j){
+                ChessPosition currPos = new ChessPosition(i,j);
+                ChessPiece currPiece = gameBoard.getPiece(currPos);
+                if(currPiece != null && currPiece.getTeamColor()== teamColor){
+                    validMoves.addAll(this.validMoves(currPos));
+                }
+            }
+        }
+        if(validMoves.isEmpty() && !isInCheck(teamColor)){
+            return true;
+        }
+        else {return false;}
     }
 
     /**

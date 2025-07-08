@@ -126,7 +126,7 @@ private TeamColor turnColor;
             }
         }
         for(ChessMove move : opponentMoves){
-            if(move.getEndPosition().equals( kingPosition)){
+            if(move.getEndPosition().equals(kingPosition)){
                 return true;
             }
         }

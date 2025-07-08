@@ -107,13 +107,17 @@ private TeamColor turnColor;
         for(int i = 1; i <=8; ++i){
             for(int j = 1; j<=8; ++j){
                 ChessPosition currPos = new ChessPosition(i,j);
-                if(gameBoard.getPiece(currPos)!= null && gameBoard.getPiece(currPos).getTeamColor() != teamColor){
-                    opponentMoves.addAll(gameBoard.getPiece(currPos).pieceMoves(gameBoard,currPos));
+                ChessPiece piece = gameBoard.getPiece(currPos);
+                if(piece != null && piece.getTeamColor() != teamColor){
+                   Collection<ChessMove> moves = piece.pieceMoves(gameBoard,currPos);
+                   if(moves != null){
+                       opponentMoves.addAll(moves);
+                   }
                 }
             }
         }
         for(ChessMove move : opponentMoves){
-            if(move.getEndPosition() == kingPosition){
+            if(move.getEndPosition().equals( kingPosition)){
                 return true;
             }
         }
@@ -125,8 +129,10 @@ private TeamColor turnColor;
         for(int i = 1; i <= 8; ++i){
             for(int j = 1; j <=8; ++j){
                 if(board.getPiece(new ChessPosition(i,j)) != null){
-                    if(board.getPiece(new ChessPosition(i,j)) == teamKing) {
-                        return new ChessPosition(i, j);
+                    if(board.getPiece(new ChessPosition(i,j)).getPieceType() == ChessPiece.PieceType.KING) {
+                        if(board.getPiece(new ChessPosition(i,j)).getTeamColor() == teamColor) {
+                            return new ChessPosition(i, j);
+                        }
                     }
                 }
             }

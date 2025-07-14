@@ -1,7 +1,11 @@
 package server;
 
 
+import com.google.gson.Gson;
 import spark.*;
+
+import java.util.Map;
+import java.util.Objects;
 
 public class Server {
 private final RegisterHandler registerHandler = new RegisterHandler();
@@ -13,7 +17,7 @@ private final RegisterHandler registerHandler = new RegisterHandler();
 
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", (registerHandler)::handleRequest);
-
+        Spark.exception(Exception.class,this::errorHandler);
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
@@ -25,5 +29,17 @@ private final RegisterHandler registerHandler = new RegisterHandler();
     public void stop() {
         Spark.stop();
         Spark.awaitStop();
+    }
+    public Object errorHandler(Exception e,Request req, Response res){
+        var body = new Gson().toJson(Map.of("message", String.format("Error: %s", e.getMessage()), "success", false));
+        res.type("application/json");
+        if(Objects.equals(e.getMessage(), "Already Taken")){
+            res.status(403);
+        }
+        else {
+            res.status(500);
+        }
+        res.body(body);
+        return body;
     }
 }

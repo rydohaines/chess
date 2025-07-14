@@ -9,6 +9,7 @@ import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO{
     private final Collection<UserData> UserDatabase = new ArrayList<>();
+    @Override
     public UserData getUser(String username){
         for(UserData user : UserDatabase){
             if(Objects.equals(username, user.username())){
@@ -16,5 +17,9 @@ public class MemoryUserDAO implements UserDAO{
             }
         }
         return null;
+    }
+    @Override
+    public void addUser(UserData userData){
+        UserDatabase.add(userData);
     }
 }

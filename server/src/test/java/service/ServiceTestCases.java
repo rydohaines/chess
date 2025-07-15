@@ -47,4 +47,34 @@ public class ServiceTestCases {
         assertTrue(gameDataAccess.listGames().isEmpty());
     }
     @Test
+    public void positiveLogout(){
+
+    }
+    public void negativeLogout(){
+
+    }
+    public void positiveLogin(){
+
+    }
+    public void negativeLogin(){
+
+    }
+    public void positiveCreateGame(){
+
+    }
+    public void negativeCreateGame(){
+
+    }
+    public void positiveJoinGame(){
+
+    }
+    public void negativeJoinGame(){
+
+    }
+    public void positiveListGames(){
+
+    }
+    public void negativeListGames(){
+
+    }
 }

@@ -27,8 +27,11 @@ public class UserService {
     }
     public LoginResponse login(LoginRequest req) throws DataAccessException{
         UserData user = dataAccess.getUser(req.username());
-        if(req.username() == null || req.password() == null || user == null) {
+        if(req.username() == null || req.password() == null) {
             throw new DataAccessException("Bad Request");
+        }
+        if(user == null){
+            throw new DataAccessException("unauthorized");
         }
         if(!Objects.equals(user.password(), req.password())){
             throw new DataAccessException("unauthorized");

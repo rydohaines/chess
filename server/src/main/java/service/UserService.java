@@ -20,6 +20,7 @@ public class UserService {
         }
         if(dataAccess.getUser(req.username()) == null){
             dataAccess.addUser(user);
+            authDataAccess.addAuth(user.username());
             return new RegisterResponse(req.username(),authDataAccess.addAuth(req.username()));
         }
         else throw new DataAccessException("Already Taken");
@@ -32,8 +33,17 @@ public class UserService {
         if(!Objects.equals(user.password(), req.password())){
             throw new DataAccessException("unauthorized");
         }
+        authDataAccess.addAuth(req.username());
         return new LoginResponse(user.username(), authDataAccess.addAuth(req.username()));
 
 
+    }
+    public void logout(LogoutRequest req) throws DataAccessException {
+        if(authDataAccess.getAuth(req.authToken()) == null){
+            throw new DataAccessException("unauthorized");
+        }
+        else {
+            authDataAccess.deleteAuth(req.authToken());
+        }
     }
 }

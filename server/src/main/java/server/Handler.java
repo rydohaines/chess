@@ -1,0 +1,10 @@
+package server;
+
+import dataaccess.DataAccessException;
+import spark.Request;
+import spark.Response;
+
+public interface Handler {
+    public Object handleRequest(Request req, Response res) throws DataAccessException;
+
+}

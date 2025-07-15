@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import dataaccess.UserDAO;
 import org.eclipse.jetty.server.Authentication;
 import service.RegisterRequest;
 import service.RegisterResponse;
@@ -9,9 +10,9 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 
-public class RegisterHandler {
+public class RegisterHandler implements Handler {
 private final UserService service;
-public RegisterHandler(UserService service){
+public RegisterHandler(UserDAO dataAccess){
     this.service = service;
 }
 public Object handleRequest(Request req, Response res) throws DataAccessException {

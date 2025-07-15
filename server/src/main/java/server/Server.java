@@ -2,6 +2,9 @@ package server;
 
 
 import com.google.gson.Gson;
+import dataaccess.AuthDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
 import org.eclipse.jetty.server.Authentication;
 import service.UserService;
 import spark.*;
@@ -9,10 +12,15 @@ import spark.*;
 import java.util.Map;
 import java.util.Objects;
 
-public class Server {
-    private UserService UserService;
-    private final RegisterHandler registerHandler = new RegisterHandler(UserService);
-private final ClearHandler clearHandler = new ClearHandler();
+public class Server() {
+    private final UserDAO userDatabase = new ;
+    private final AuthDAO authDatabase;
+    private final GameDAO gameDatabase;
+    private final UserService = new UserService(userDatabase,authDatabase);
+    private final Handler registerHandler = new RegisterHandler(userDatabase);
+    private final Handler clearHandler = new ClearHandler();
+
+
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 

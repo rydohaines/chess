@@ -3,6 +3,9 @@ package service;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
+import model.GameData;
+
+import java.util.Collection;
 
 public class GameService {
     private final GameDAO gameDataAccess;
@@ -19,5 +22,8 @@ public class GameService {
     }
     public AuthDAO getAuthDataAccess(){
         return authDataAccess;
+    }
+    public ListGamesResponse listGames(){
+        return new ListGamesResponse(gameDataAccess.listGames());
     }
 }

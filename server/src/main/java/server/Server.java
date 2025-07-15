@@ -24,7 +24,7 @@ public class Server {
     private final Handler LoginHandler = new LoginHandler(userService);
     private final Handler LogoutHandler = new LogoutHandler(userService);
     private final Handler CreateGameHandler = new CreateGameHandler(gameService);
-
+    private final Handler ListGameHandler = new ListGameHandler(gameService);
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -37,6 +37,7 @@ public class Server {
         Spark.post("/session",(LoginHandler)::handleRequest);
         Spark.delete("/session",(LogoutHandler)::handleRequest);
         Spark.post("/game",(CreateGameHandler)::handleRequest);
+        Spark.get("/game",(ListGameHandler)::handleRequest);
         Spark.exception(Exception.class,this::errorHandler);
 
         //This line initializes the server and can be removed once you have a functioning endpoint 

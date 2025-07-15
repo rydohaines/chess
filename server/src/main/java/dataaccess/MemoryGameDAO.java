@@ -20,4 +20,7 @@ public class MemoryGameDAO implements GameDAO{
         GameDatabase.add(game);
         return gameID;
     }
+    public Collection<GameData> listGames(){
+
+    }
 }

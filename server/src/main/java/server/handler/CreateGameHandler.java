@@ -1,12 +1,14 @@
-package server;
+package server.handler;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import service.*;
+import service.ResponsesRequests.CreateGameRequest;
+import service.ResponsesRequests.CreateGameResponse;
 import spark.Request;
 import spark.Response;
 
-public class CreateGameHandler implements Handler{
+public class CreateGameHandler implements Handler {
     private GameService service;
     public CreateGameHandler(GameService service){
         this.service = service;

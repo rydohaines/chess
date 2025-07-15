@@ -22,7 +22,7 @@ public class MemoryGameDAO implements GameDAO{
         return gameID;
     }
     public Collection<GameData> listGames(){
-    return null;
+    return GameDatabase;
     }
     public GameData getGame(int gameID){
         for(GameData data : GameDatabase){

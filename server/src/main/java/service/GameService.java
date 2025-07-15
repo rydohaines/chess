@@ -5,7 +5,12 @@ import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import model.GameData;
+import service.ResponsesRequests.CreateGameRequest;
+import service.ResponsesRequests.CreateGameResponse;
+import service.ResponsesRequests.JoinGameRequest;
+import service.ResponsesRequests.ListGamesResponse;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -25,10 +30,15 @@ public class GameService {
     public AuthDAO getAuthDataAccess(){
         return authDataAccess;
     }
-    //public ListGamesResponse listGames(){
-        //return new ListGamesResponse(gameDataAccess.listGames());
-    //}
-    public void joinGame(JoinGameRequest req,String username) throws DataAccessException {
+    public Collection<ListGamesResponse> listGames(){
+        Collection <GameData> games = gameDataAccess.listGames();
+        Collection < ListGamesResponse> responses = new ArrayList<>();
+        for(GameData game : games){
+            responses.add(new ListGamesResponse(game.gameID(),game.whiteUsername(),game.blackUsername(),game.gameName()));
+        }
+        return responses;
+    }
+    public void joinGame(JoinGameRequest req, String username) throws DataAccessException {
         ChessGame.TeamColor playerColor;
         if(Objects.equals(req.playerColor(), "BLACK")){
             playerColor = ChessGame.TeamColor.BLACK;

@@ -1,8 +1,7 @@
-package server;
+package server.handler;
 
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import model.AuthData;
 import spark.Request;
 import spark.Response;
 

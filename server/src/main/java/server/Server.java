@@ -3,14 +3,13 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.*;
-import org.eclipse.jetty.server.Authentication;
+import server.handler.*;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
 import spark.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class Server {
     private final UserDAO userDatabase = new MemoryUserDAO();
@@ -24,7 +23,7 @@ public class Server {
     private final Handler LoginHandler = new LoginHandler(userService);
     private final Handler LogoutHandler = new LogoutHandler(userService);
     private final Handler CreateGameHandler = new CreateGameHandler(gameService);
-    //private final Handler ListGameHandler = new ListGameHandler(gameService);
+    private final Handler ListGameHandler = new ListGameHandler(gameService);
     private final Handler JoinGameHandler = new JoinGameHandler(gameService);
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -37,7 +36,7 @@ public class Server {
         Spark.post("/session",(LoginHandler)::handleRequest);
         Spark.delete("/session",(LogoutHandler)::handleRequest);
         Spark.post("/game",(CreateGameHandler)::handleRequest);
-        //Spark.get("/game",(ListGameHandler)::handleRequest);
+        Spark.get("/game",(ListGameHandler)::handleRequest);
         Spark.put("/game",(JoinGameHandler)::handleRequest);
         Spark.exception(Exception.class,this::errorHandler);
 

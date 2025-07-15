@@ -1,11 +1,9 @@
-package server;
+package server.handler;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
-import dataaccess.UserDAO;
-import org.eclipse.jetty.server.Authentication;
-import service.RegisterRequest;
-import service.RegisterResponse;
+import service.ResponsesRequests.RegisterRequest;
+import service.ResponsesRequests.RegisterResponse;
 import service.UserService;
 import spark.Request;
 import spark.Response;

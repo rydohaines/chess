@@ -1,9 +1,4 @@
-package service;
-
-import model.GameData;
-
-import java.util.ArrayList;
-import java.util.Collection;
+package service.ResponsesRequests;
 
 public record ListGamesResponse(int gameID, String whiteUsername,String blackUsername,String gameName) {
 }

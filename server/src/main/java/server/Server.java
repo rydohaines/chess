@@ -21,6 +21,7 @@ public class Server {
     private final ClearService clearService = new ClearService(userDatabase,authDatabase,gameDatabase);
     private final Handler registerHandler = new RegisterHandler(userService);
     private final Handler clearHandler = new ClearHandler(clearService);
+    private final Handler LoginHandler = new LoginHandler(userService);
 
 
     public int run(int desiredPort) {
@@ -31,6 +32,7 @@ public class Server {
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", (registerHandler)::handleRequest);
         Spark.delete("/db",(clearHandler)::handleRequest);
+        Spark.post("/session",(LoginHandler)::handleRequest);
         Spark.exception(Exception.class,this::errorHandler);
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
@@ -47,14 +49,11 @@ public class Server {
     public Object errorHandler(Exception e,Request req, Response res){
         var body = new Gson().toJson(Map.of("message", String.format("Error: %s", e.getMessage()), "success", false));
         res.type("application/json");
-        if(Objects.equals(e.getMessage(), "Already Taken")){
-            res.status(403);
-        }
-        else if(Objects.equals(e.getMessage(),"Bad Request")){
-            res.status(400);
-        }
-        else {
-            res.status(500);
+        switch (e.getMessage()) {
+            case "Already Taken" -> res.status(403);
+            case "Bad Request" -> res.status(400);
+            case "unauthorized" -> res.status(401);
+            case null, default -> res.status(500);
         }
         res.body(body);
         return body;

@@ -49,4 +49,7 @@ public class UserService {
             authDataAccess.deleteAuth(req.authToken());
         }
     }
+    public AuthDAO getAuthDataAccess(){
+        return authDataAccess;
+    }
 }

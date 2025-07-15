@@ -12,7 +12,7 @@ import spark.Response;
 
 public class RegisterHandler implements Handler {
 private final UserService service;
-public RegisterHandler(UserDAO dataAccess){
+public RegisterHandler(UserService service){
     this.service = service;
 }
 public Object handleRequest(Request req, Response res) throws DataAccessException {

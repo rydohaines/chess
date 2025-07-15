@@ -22,4 +22,8 @@ public class MemoryUserDAO implements UserDAO{
     public void addUser(UserData userData){
         UserDatabase.add(userData);
     }
+    @Override
+    public void clearAll(){
+        UserDatabase.clear();
+    }
 }

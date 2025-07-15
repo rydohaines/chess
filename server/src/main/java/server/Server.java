@@ -2,23 +2,25 @@ package server;
 
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
-import dataaccess.GameDAO;
-import dataaccess.UserDAO;
+import dataaccess.*;
 import org.eclipse.jetty.server.Authentication;
+import service.ClearService;
+import service.GameService;
 import service.UserService;
 import spark.*;
 
 import java.util.Map;
 import java.util.Objects;
 
-public class Server() {
-    private final UserDAO userDatabase = new ;
-    private final AuthDAO authDatabase;
-    private final GameDAO gameDatabase;
-    private final UserService = new UserService(userDatabase,authDatabase);
-    private final Handler registerHandler = new RegisterHandler(userDatabase);
-    private final Handler clearHandler = new ClearHandler();
+public class Server {
+    private final UserDAO userDatabase = new MemoryUserDAO();
+    private final AuthDAO authDatabase = new MemoryAuthDAO();
+    private final GameDAO gameDatabase = new MemoryGameDAO();
+    private final UserService userService = new UserService(userDatabase,authDatabase);
+    private final GameService gameService = new GameService(gameDatabase,authDatabase);
+    private final ClearService clearService = new ClearService(userDatabase,authDatabase,gameDatabase);
+    private final Handler registerHandler = new RegisterHandler(userService);
+    private final Handler clearHandler = new ClearHandler(clearService);
 
 
     public int run(int desiredPort) {

@@ -13,6 +13,9 @@ public class UserService {
 
     public RegisterResponse register(RegisterRequest req ) throws DataAccessException {
         UserData user = new UserData(req.username(), req.password(), req.email());
+        if(req.username() == null || req.password() == null || req.email() == null){
+            throw new DataAccessException("Bad Request");
+        }
         if(dataAccess.getUser(req.username()) == null){
             dataAccess.addUser(user);
             return new RegisterResponse(req.username(),authDataAccess.addAuth(req.username()));

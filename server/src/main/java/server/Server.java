@@ -50,6 +50,9 @@ public class Server {
         if(Objects.equals(e.getMessage(), "Already Taken")){
             res.status(403);
         }
+        else if(Objects.equals(e.getMessage(),"Bad Request")){
+            res.status(400);
+        }
         else {
             res.status(500);
         }

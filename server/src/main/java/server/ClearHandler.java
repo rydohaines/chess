@@ -11,7 +11,9 @@ public class ClearHandler implements Handler {
     }
     public Object handleRequest(Request req, Response res){
         service.clear();
-        return 200;
+        res.status(200);
+        res.type("application/json");
+        return "";
     }
 
 }

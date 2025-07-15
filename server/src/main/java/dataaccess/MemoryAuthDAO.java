@@ -27,6 +27,15 @@ public class MemoryAuthDAO implements AuthDAO{
         return null;
     }
     @Override
+    public String getUser(String authToken){
+        for(AuthData authData : AuthDatabase){
+            if(Objects.equals(authToken, authData.authToken())){
+                return authData.username();
+            }
+        }
+        return null;
+    }
+    @Override
     public void deleteAuth(String authToken) {
         Iterator<AuthData> iterator = AuthDatabase.iterator();
         while (iterator.hasNext()) {

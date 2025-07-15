@@ -10,7 +10,10 @@ import spark.Request;
 import spark.Response;
 
 public class RegisterHandler {
-private final UserService service = new UserService();
+private final UserService service;
+public RegisterHandler(UserService service){
+    this.service = service;
+}
 public Object handleRequest(Request req, Response res) throws DataAccessException {
         var gson = new Gson();
         String body = req.body();

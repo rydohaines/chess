@@ -2,14 +2,17 @@ package server;
 
 
 import com.google.gson.Gson;
+import org.eclipse.jetty.server.Authentication;
+import service.UserService;
 import spark.*;
 
 import java.util.Map;
 import java.util.Objects;
 
 public class Server {
-private final RegisterHandler registerHandler = new RegisterHandler();
-
+    private UserService UserService;
+    private final RegisterHandler registerHandler = new RegisterHandler(UserService);
+private final ClearHandler clearHandler = new ClearHandler();
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
@@ -17,6 +20,7 @@ private final RegisterHandler registerHandler = new RegisterHandler();
 
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", (registerHandler)::handleRequest);
+        Spark.delete("/db",(clearHandler)::handleRequest);
         Spark.exception(Exception.class,this::errorHandler);
 
         //This line initializes the server and can be removed once you have a functioning endpoint 

@@ -4,7 +4,10 @@ import dataaccess.*;
 import model.UserData;
 
 public class UserService {
-    private final UserDAO dataAccess = new MemoryUserDAO();
+    private final UserDAO dataAccess;
+    public UserService(UserDAO dataAccess){
+        this.dataAccess = dataAccess;
+    }
     private final AuthDAO authDataAccess = new MemoryAuthDAO();
     public RegisterResponse register(RegisterRequest req ) throws DataAccessException {
         UserData user = new UserData(req.username(), req.password(), req.email());

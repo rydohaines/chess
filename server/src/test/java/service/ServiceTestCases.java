@@ -2,10 +2,14 @@ package service;
 
 import dataaccess.*;
 import model.UserData;
-import service.ResponsesRequests.RegisterRequest;
-import service.ResponsesRequests.RegisterResponse;
+import server.handler.ListGameHandler;
+import service.ResponsesRequests.*;
 import org.junit.jupiter.api.Test;
+import spark.Request;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Collection;
 import java.util.Objects;
 
 
@@ -47,34 +51,108 @@ public class ServiceTestCases {
         assertTrue(gameDataAccess.listGames().isEmpty());
     }
     @Test
-    public void positiveLogout(){
+    public void positiveLogout() throws DataAccessException {
+        UserDAO userDataAccess = new MemoryUserDAO();
+        AuthDAO authDataAccess = new MemoryAuthDAO();
+        UserService userService = new UserService(userDataAccess,authDataAccess);
+        userDataAccess.addUser(new UserData("newUser","password","email"));
+        String authToken = authDataAccess.addAuth("newUser");
+        userService.logout(new LogoutRequest(authToken));
+
+        assertNull(authDataAccess.getAuth("authToken"));
+    }
+    @Test
+    public void negativeLogout() throws DataAccessException {
+        UserDAO userDataAccess = new MemoryUserDAO();
+        AuthDAO authDataAccess = new MemoryAuthDAO();
+        UserService userService = new UserService(userDataAccess,authDataAccess);
+        userDataAccess.addUser(new UserData("newUser","password","email"));
+
+        assertThrows(DataAccessException.class,() -> userService.logout(new LogoutRequest("invalidToken")));
+    }
+    @Test
+    public void positiveLogin() throws DataAccessException {
+        UserDAO userDataAccess = new MemoryUserDAO();
+        AuthDAO authDataAccess = new MemoryAuthDAO();
+        UserService userService = new UserService(userDataAccess,authDataAccess);
+        userDataAccess.addUser(new UserData("newUser","password","email"));
+        String authToken = authDataAccess.addAuth("newUser");
+        LoginResponse response = userService.login(new LoginRequest("newUser","password"));
+        assertEquals("newUser",response.username());
+        assertNotNull(response.authToken());
 
     }
-    public void negativeLogout(){
+    @Test
+    public void negativeLogin() throws DataAccessException {
+        UserDAO userDataAccess = new MemoryUserDAO();
+        AuthDAO authDataAccess = new MemoryAuthDAO();
+        UserService userService = new UserService(userDataAccess,authDataAccess);
+        userDataAccess.addUser(new UserData("newUser","password","email"));
+        String authToken = authDataAccess.addAuth("newUser");
+        assertThrows(DataAccessException.class, () -> userService.login(new LoginRequest("newUser","wrongpassword")));
+    }
+    @Test
+    public void positiveCreateGame() throws DataAccessException {
+        GameDAO gameDAO = new MemoryGameDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new MemoryUserDAO();
+        GameService gameService = new GameService(gameDAO,authDAO);
+        UserService userService = new UserService(userDAO,authDAO);
+        RegisterResponse response = userService.register(new RegisterRequest("newUser","password","email"));
+        CreateGameResponse result =  gameService.createGame(new CreateGameRequest(response.authToken(),"gameName"));
+
+        assertNotNull(gameDAO.getGame(result.gameID()));
+    }
+    @Test
+    public void negativeCreateGame() throws DataAccessException {
+        GameDAO gameDAO = new MemoryGameDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new MemoryUserDAO();
+        GameService gameService = new GameService(gameDAO,authDAO);
+        UserService userService = new UserService(userDAO,authDAO);
+        RegisterResponse response = userService.register(new RegisterRequest("newUser","password","email"));
+        assertThrows(DataAccessException.class, () -> gameService.createGame(new CreateGameRequest(response.authToken(),null)));
+    }
+    @Test
+    public void positiveJoinGame() throws DataAccessException {
+        GameDAO gameDAO = new MemoryGameDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new MemoryUserDAO();
+        userDAO.addUser(new UserData("newUser","password","email"));
+        int gameID = gameDAO.createGame("newGame");
+        GameService service= new GameService(gameDAO,authDAO);
+        service.joinGame(new JoinGameRequest("BLACK", gameID ,"newUser"),"newUser");
+        assertEquals("newUser", gameDAO.getGame(gameID).blackUsername());
 
     }
-    public void positiveLogin(){
-
+    @Test
+    public void negativeJoinGame() throws DataAccessException {
+        GameDAO gameDAO = new MemoryGameDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new MemoryUserDAO();
+        userDAO.addUser(new UserData("newUser","password","email"));
+        int gameID = gameDAO.createGame("newGame");
+        GameService service= new GameService(gameDAO,authDAO);
+        service.joinGame(new JoinGameRequest("BLACK", gameID ,"newUser"),"newUser");
+        assertThrows(DataAccessException.class, () -> service.joinGame(new JoinGameRequest("BLACK",gameID,"newUser"),"newUser"));
     }
-    public void negativeLogin(){
-
-    }
-    public void positiveCreateGame(){
-
-    }
-    public void negativeCreateGame(){
-
-    }
-    public void positiveJoinGame(){
-
-    }
-    public void negativeJoinGame(){
-
-    }
+    @Test
     public void positiveListGames(){
+        UserDAO userDAO = new MemoryUserDAO();
+        AuthDAO authDAO = new MemoryAuthDAO();
+        GameDAO gameDAO = new MemoryGameDAO();
+        userDAO.addUser(new UserData("alice", "pass", "alice@example.com")) ;
+        String authToken = authDAO.addAuth("alice");
+        int gameID = gameDAO.createGame("game1");
+        int game2ID = gameDAO.createGame("game2");
 
+        GameService gameService = new GameService(gameDAO, authDAO);
+        Collection<ListGamesResponse> games = gameService.listGames();
+        ListGamesResult result = new ListGamesResult(games);
+        assertEquals(2,result.games().size());
     }
+    @Test
     public void negativeListGames(){
-
+       // Handler handles authorization
     }
 }

@@ -2,16 +2,12 @@ package service;
 
 import dataaccess.*;
 import model.UserData;
-import server.handler.ListGameHandler;
-import service.ResponsesRequests.*;
+import service.responses.*;
 import org.junit.jupiter.api.Test;
-import spark.Request;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collection;
-import java.util.Objects;
-
 
 
 public class ServiceTestCases {

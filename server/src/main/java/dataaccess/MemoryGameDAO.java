@@ -9,23 +9,23 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class MemoryGameDAO implements GameDAO{
-    private final Collection<GameData> GameDatabase = new ArrayList<>();
+    private final Collection<GameData> gameDatabase = new ArrayList<>();
 
     @Override
     public void clearAll() {
-        GameDatabase.clear();
+        gameDatabase.clear();
     }
     public int createGame(String gameName){
-        int gameID = GameDatabase.size()+100;
+        int gameID = gameDatabase.size()+100;
         GameData game = new GameData(gameID,null,null,gameName,new ChessGame());
-        GameDatabase.add(game);
+        gameDatabase.add(game);
         return gameID;
     }
     public Collection<GameData> listGames(){
-    return GameDatabase;
+    return gameDatabase;
     }
     public GameData getGame(int gameID){
-        for(GameData data : GameDatabase){
+        for(GameData data : gameDatabase){
             if(data.gameID() == gameID){
                 return data;
             }
@@ -50,7 +50,7 @@ public class MemoryGameDAO implements GameDAO{
                 newGame = new GameData(gameID,game.whiteUsername(),username,game.gameName(),game.game());
             }
         }
-        GameDatabase.remove(game);
-        GameDatabase.add(newGame);
+        gameDatabase.remove(game);
+        gameDatabase.add(newGame);
     }
 }

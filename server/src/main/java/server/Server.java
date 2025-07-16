@@ -20,11 +20,11 @@ public class Server {
     private final ClearService clearService = new ClearService(userDatabase,authDatabase,gameDatabase);
     private final Handler registerHandler = new RegisterHandler(userService);
     private final Handler clearHandler = new ClearHandler(clearService);
-    private final Handler LoginHandler = new LoginHandler(userService);
-    private final Handler LogoutHandler = new LogoutHandler(userService);
-    private final Handler CreateGameHandler = new CreateGameHandler(gameService);
-    private final Handler ListGameHandler = new ListGameHandler(gameService);
-    private final Handler JoinGameHandler = new JoinGameHandler(gameService);
+    private final Handler loginHandler = new LoginHandler(userService);
+    private final Handler logoutHandler = new LogoutHandler(userService);
+    private final Handler createGameHandler = new CreateGameHandler(gameService);
+    private final Handler listGameHandler = new ListGameHandler(gameService);
+    private final Handler joinGameHandler = new JoinGameHandler(gameService);
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
@@ -33,11 +33,11 @@ public class Server {
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", (registerHandler)::handleRequest);
         Spark.delete("/db",(clearHandler)::handleRequest);
-        Spark.post("/session",(LoginHandler)::handleRequest);
-        Spark.delete("/session",(LogoutHandler)::handleRequest);
-        Spark.post("/game",(CreateGameHandler)::handleRequest);
-        Spark.get("/game",(ListGameHandler)::handleRequest);
-        Spark.put("/game",(JoinGameHandler)::handleRequest);
+        Spark.post("/session",(loginHandler)::handleRequest);
+        Spark.delete("/session",(logoutHandler)::handleRequest);
+        Spark.post("/game",(createGameHandler)::handleRequest);
+        Spark.get("/game",(listGameHandler)::handleRequest);
+        Spark.put("/game",(joinGameHandler)::handleRequest);
         Spark.exception(Exception.class,this::errorHandler);
 
         //This line initializes the server and can be removed once you have a functioning endpoint 

@@ -8,10 +8,10 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO{
-    private final Collection<UserData> UserDatabase = new ArrayList<>();
+    private final Collection<UserData> userDatabase = new ArrayList<>();
     @Override
     public UserData getUser(String username){
-        for(UserData user : UserDatabase){
+        for(UserData user : userDatabase){
             if(Objects.equals(username, user.username())){
                 return user;
             }
@@ -20,10 +20,10 @@ public class MemoryUserDAO implements UserDAO{
     }
     @Override
     public void addUser(UserData userData){
-        UserDatabase.add(userData);
+        userDatabase.add(userData);
     }
     @Override
     public void clearAll(){
-        UserDatabase.clear();
+        userDatabase.clear();
     }
 }

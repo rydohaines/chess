@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Collection;
 
 
-public class serviceTests {
+public class ServiceTests {
     @Test
     public void positiveRegister() throws DataAccessException {
         UserDAO userDataAccess = new MemoryUserDAO();

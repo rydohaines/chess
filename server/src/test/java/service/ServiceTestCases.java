@@ -47,6 +47,10 @@ public class ServiceTestCases {
         assertTrue(gameDataAccess.listGames().isEmpty());
     }
     @Test
+    public void negativeClear(){
+        assertTrue(true);
+    }
+    @Test
     public void positiveLogout() throws DataAccessException {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();

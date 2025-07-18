@@ -16,6 +16,7 @@ public class DatabaseManager {
         loadPropertiesFromResources();
     }
 
+    // testing
     /**
      * Creates the database if it does not already exist.
      */

@@ -2,6 +2,7 @@ package server.handler;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
+import dataaccess.ResponseException;
 import service.*;
 import service.responses.LoginRequest;
 import service.responses.LoginResponse;
@@ -14,7 +15,7 @@ public class LoginHandler implements Handler {
         this.service = service;
     }
     @Override
-    public Object handleRequest(Request req, Response res) throws DataAccessException {
+    public Object handleRequest(Request req, Response res) throws DataAccessException, ResponseException {
         var gson = new Gson();
         String body = req.body();
         LoginRequest request  = (LoginRequest)gson.fromJson(body, LoginRequest.class);

@@ -12,18 +12,26 @@ import spark.*;
 import java.util.Map;
 
 public class Server {
-    public Server(UserService userService, GameService gameService, ClearService clearService){
-        this.userService = userService;
-        this.gameService = gameService;
-        this.clearService = clearService;
+    private final UserDAO userDataAccess;
+    private final AuthDAO authDataAccess;
+    private final GameDAO gameDataAccess;
+
+    {
+        try {
+            userDataAccess = new MySQLUserDAO();
+            authDataAccess = new MySQLAuthDAO();
+            gameDataAccess = new MySQLGameDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-    private GameService gameService;
-    private ClearService clearService;
-    private UserService userService;
+    private final UserService userService = new UserService(userDataAccess,authDataAccess);
+    private final GameService gameService = new GameService(gameDataAccess,authDataAccess);
+    private final ClearService clearService = new ClearService(userDataAccess,authDataAccess,gameDataAccess);
     private final Handler registerHandler = new RegisterHandler(userService);
     private final Handler clearHandler = new ClearHandler(clearService);
     private final Handler loginHandler = new LoginHandler(userService);
-    private final Handler logoutHandler = new LogoutHandler(userService);
+    private final Handler logoutHandler  = new LogoutHandler(userService);
     private final Handler createGameHandler = new CreateGameHandler(gameService);
     private final Handler listGameHandler = new ListGameHandler(gameService);
     private final Handler joinGameHandler = new JoinGameHandler(gameService);

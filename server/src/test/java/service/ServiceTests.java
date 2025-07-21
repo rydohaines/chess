@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 
 public class ServiceTests {
     @Test
-    public void positiveRegister() throws DataAccessException {
+    public void positiveRegister() throws Exception {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         UserService userService = new UserService(userDataAccess,authDataAccess);
@@ -22,7 +23,7 @@ public class ServiceTests {
         assertNotNull(result.authToken());
     }
     @Test
-    public void negativeRegister() throws DataAccessException{
+    public void negativeRegister() throws Exception {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         UserService userService = new UserService(userDataAccess,authDataAccess);
@@ -32,7 +33,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, () -> userService.register(repeatRequest));
     }
     @Test
-    public void positiveClear() throws DataAccessException {
+    public void positiveClear() throws DataAccessException, ResponseException, SQLException {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         GameDAO gameDataAccess = new MemoryGameDAO();
@@ -51,7 +52,7 @@ public class ServiceTests {
         assertTrue(true);
     }
     @Test
-    public void positiveLogout() throws DataAccessException {
+    public void positiveLogout() throws DataAccessException, SQLException {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         UserService userService = new UserService(userDataAccess,authDataAccess);
@@ -62,7 +63,7 @@ public class ServiceTests {
         assertNull(authDataAccess.getAuth("authToken"));
     }
     @Test
-    public void negativeLogout() throws DataAccessException {
+    public void negativeLogout() throws DataAccessException, SQLException {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         UserService userService = new UserService(userDataAccess,authDataAccess);
@@ -71,7 +72,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class,() -> userService.logout(new LogoutRequest("invalidToken")));
     }
     @Test
-    public void positiveLogin() throws DataAccessException {
+    public void positiveLogin() throws DataAccessException, ResponseException, SQLException {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         UserService userService = new UserService(userDataAccess,authDataAccess);
@@ -83,7 +84,7 @@ public class ServiceTests {
 
     }
     @Test
-    public void negativeLogin() throws DataAccessException {
+    public void negativeLogin() throws DataAccessException, SQLException {
         UserDAO userDataAccess = new MemoryUserDAO();
         AuthDAO authDataAccess = new MemoryAuthDAO();
         UserService userService = new UserService(userDataAccess,authDataAccess);
@@ -92,7 +93,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, () -> userService.login(new LoginRequest("newUser","wrongpassword")));
     }
     @Test
-    public void positiveCreateGame() throws DataAccessException {
+    public void positiveCreateGame() throws Exception {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserDAO userDAO = new MemoryUserDAO();
@@ -104,7 +105,7 @@ public class ServiceTests {
         assertNotNull(gameDAO.getGame(result.gameID()));
     }
     @Test
-    public void negativeCreateGame() throws DataAccessException {
+    public void negativeCreateGame() throws Exception {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserDAO userDAO = new MemoryUserDAO();
@@ -114,7 +115,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, () -> gameService.createGame(new CreateGameRequest(response.authToken(),null)));
     }
     @Test
-    public void positiveJoinGame() throws DataAccessException {
+    public void positiveJoinGame() throws DataAccessException, SQLException {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserDAO userDAO = new MemoryUserDAO();
@@ -126,7 +127,7 @@ public class ServiceTests {
 
     }
     @Test
-    public void negativeJoinGame() throws DataAccessException {
+    public void negativeJoinGame() throws DataAccessException, SQLException {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserDAO userDAO = new MemoryUserDAO();
@@ -137,7 +138,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, () -> service.joinGame(new JoinGameRequest("BLACK",gameID,"newUser"),"newUser"));
     }
     @Test
-    public void positiveListGames(){
+    public void positiveListGames() throws SQLException, DataAccessException {
         UserDAO userDAO = new MemoryUserDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();

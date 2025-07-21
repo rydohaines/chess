@@ -4,6 +4,7 @@ import dataaccess.*;
 import model.UserData;
 import service.responses.*;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class UserService {
@@ -14,7 +15,7 @@ public class UserService {
         this.authDataAccess = authDataAccess;
     }
 
-    public RegisterResponse register(RegisterRequest req ) throws DataAccessException {
+    public RegisterResponse register(RegisterRequest req ) throws Exception{
         UserData user = new UserData(req.username(), req.password(), req.email());
         if (req.username() == null || req.password() == null || req.email() == null) {
             throw new DataAccessException("Bad Request");
@@ -27,7 +28,7 @@ public class UserService {
             throw new DataAccessException("Already Taken");
         }
     }
-    public LoginResponse login(LoginRequest req) throws DataAccessException{
+    public LoginResponse login(LoginRequest req) throws DataAccessException, ResponseException {
         UserData user = dataAccess.getUser(req.username());
         if(req.username() == null || req.password() == null) {
             throw new DataAccessException("Bad Request");

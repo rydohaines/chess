@@ -40,8 +40,8 @@ public class MySQLUserDAO implements UserDAO{
                 ps.setString(1, username);
                 try (var rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        ResultSet resultSet = ps.getGeneratedKeys();
-                        return new UserData(resultSet.getString(1),null,null);
+                        var name = rs.getString(1);
+                        return new UserData(name,null,null);
                     }
                 }
             }

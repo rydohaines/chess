@@ -23,13 +23,13 @@ public class MySQLUserDAO extends MySQLdata implements UserDAO{
     @Override
     public UserData getUser(String username) throws ResponseException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT username FROM user WHERE username=?";
+            var statement = "SELECT username,password,email FROM user WHERE username=?";
             try (var ps = conn.prepareStatement(statement)) {
                 ps.setString(1, username);
                 try (var rs = ps.executeQuery()) {
                     if (rs.next()) {
                         var name = rs.getString(1);
-                        return new UserData(name,null,null);
+                        return new UserData(name,rs.getString("password"),rs.getString("email"));
                     }
                 }
             }

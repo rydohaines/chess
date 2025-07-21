@@ -12,12 +12,14 @@ import spark.*;
 import java.util.Map;
 
 public class Server {
-    private final UserDAO userDatabase = new MemoryUserDAO();
-    private final AuthDAO authDatabase = new MemoryAuthDAO();
-    private final GameDAO gameDatabase = new MemoryGameDAO();
-    private final UserService userService = new UserService(userDatabase,authDatabase);
-    private final GameService gameService = new GameService(gameDatabase,authDatabase);
-    private final ClearService clearService = new ClearService(userDatabase,authDatabase,gameDatabase);
+    public Server(UserService userService, GameService gameService, ClearService clearService){
+        this.userService = userService;
+        this.gameService = gameService;
+        this.clearService = clearService;
+    }
+    private GameService gameService;
+    private ClearService clearService;
+    private UserService userService;
     private final Handler registerHandler = new RegisterHandler(userService);
     private final Handler clearHandler = new ClearHandler(clearService);
     private final Handler loginHandler = new LoginHandler(userService);
@@ -25,6 +27,11 @@ public class Server {
     private final Handler createGameHandler = new CreateGameHandler(gameService);
     private final Handler listGameHandler = new ListGameHandler(gameService);
     private final Handler joinGameHandler = new JoinGameHandler(gameService);
+
+    public Server() {
+
+    }
+
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 

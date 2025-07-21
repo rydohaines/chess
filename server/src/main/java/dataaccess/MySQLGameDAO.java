@@ -6,7 +6,7 @@ import model.GameData;
 import java.util.Collection;
 import java.util.List;
 
-public class MySQLGameDAO implements GameDAO{
+public class MySQLGameDAO extends MySQLdata implements GameDAO{
 
     @Override
     public void clearAll() {

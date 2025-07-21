@@ -28,7 +28,7 @@ public class UserService {
             throw new DataAccessException("Already Taken");
         }
     }
-    public LoginResponse login(LoginRequest req) throws DataAccessException, ResponseException {
+    public LoginResponse login(LoginRequest req) throws DataAccessException, ResponseException, SQLException {
         UserData user = dataAccess.getUser(req.username());
         if(req.username() == null || req.password() == null) {
             throw new DataAccessException("Bad Request");

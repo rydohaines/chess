@@ -9,13 +9,15 @@ import service.responses.LoginResponse;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
+
 public class LoginHandler implements Handler {
     private final UserService service;
     public LoginHandler(UserService service){
         this.service = service;
     }
     @Override
-    public Object handleRequest(Request req, Response res) throws DataAccessException, ResponseException {
+    public Object handleRequest(Request req, Response res) throws DataAccessException, ResponseException, SQLException {
         var gson = new Gson();
         String body = req.body();
         LoginRequest request  = (LoginRequest)gson.fromJson(body, LoginRequest.class);

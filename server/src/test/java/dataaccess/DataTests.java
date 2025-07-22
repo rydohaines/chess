@@ -29,6 +29,8 @@ public class DataTests {
     public void negativeRegister() throws Exception {
         UserDAO userDataAccess = new MySQLUserDAO();
         AuthDAO authDataAccess = new MySQLAuthDAO();
+        userDataAccess.clearAll();
+        authDataAccess.clearAll();
         UserService userService = new UserService(userDataAccess,authDataAccess);
         RegisterRequest request = new RegisterRequest("NewUsername","newpassword","newuser@test.com");
         RegisterResponse result = userService.register(request);
@@ -167,4 +169,22 @@ public class DataTests {
         // Handler handles authorization
         assertTrue(true);
     }
+    @Test
+    public void multipleTests() throws Exception {
+        UserDAO userDAO = new MySQLUserDAO();
+        AuthDAO authDAO = new MySQLAuthDAO();
+        GameDAO gameDAO = new MySQLGameDAO();
+        UserService userService = new UserService(userDAO,authDAO);
+        RegisterRequest request = new RegisterRequest("NewUsername","password","newuser@test.com");
+        RegisterResponse result = userService.register(request);
+        LoginResponse response = userService.login(new LoginRequest("NewUsername","password"));
+        assertEquals("NewUsername",response.username());
+        assertEquals("NewUsername", result.username());
+        assertNotNull(result.authToken());
+    }
+    @Test
+    public void DummyTest(){
+        assertTrue(true);
+    }
+
 }

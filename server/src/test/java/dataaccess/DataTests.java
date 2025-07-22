@@ -13,6 +13,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DataTests {
+    @Test
     public void positiveRegister() throws Exception {
         UserDAO userDataAccess = new MySQLUserDAO();
         AuthDAO authDataAccess = new MySQLAuthDAO();
@@ -153,10 +154,6 @@ public class DataTests {
         userDAO.clearAll();
         gameDAO.clearAll();
         userDAO.addUser(new UserData("alice", "pass", "alice@example.com")) ;
-        String authToken = authDAO.addAuth("alice");
-        int gameID = gameDAO.createGame("game1");
-        int game2ID = gameDAO.createGame("game2");
-
         GameService gameService = new GameService(gameDAO, authDAO);
         Collection<ListGamesResponse> games = gameService.listGames();
         ListGamesResult result = new ListGamesResult(games);

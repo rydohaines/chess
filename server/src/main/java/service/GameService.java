@@ -32,7 +32,7 @@ public class GameService {
     public AuthDAO getAuthDataAccess(){
         return authDataAccess;
     }
-    public Collection<ListGamesResponse> listGames(){
+    public Collection<ListGamesResponse> listGames() throws ResponseException {
         Collection <GameData> games = gameDataAccess.listGames();
         Collection < ListGamesResponse> responses = new ArrayList<>();
         for(GameData game : games){

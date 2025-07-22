@@ -138,7 +138,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, () -> service.joinGame(new JoinGameRequest("BLACK",gameID,"newUser"),"newUser"));
     }
     @Test
-    public void positiveListGames() throws SQLException, DataAccessException {
+    public void positiveListGames() throws SQLException, DataAccessException, ResponseException {
         UserDAO userDAO = new MemoryUserDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();

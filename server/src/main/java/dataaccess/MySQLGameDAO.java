@@ -53,7 +53,26 @@ public class MySQLGameDAO extends MySQLdata implements GameDAO{
     }
 
     @Override
-    public GameData getGame(int gameID) {
+    public GameData getGame(int gameID) throws ResponseException {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT gameID,whiteUsernamem, blackUsername,gameName,jsonGame FROM pet WHERE gameID=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setInt(1, gameID);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        var id = rs.getInt("gameID");
+                        var json = rs.getString("jsonGame");
+                        var white = rs.getString("whiteUsername");
+                        var black = rs.getString("blackUsername");
+                        var gameName = rs.getString("gameName");
+                        var newGame = new Gson().fromJson(json, ChessGame.class);
+                        return new GameData(id,white,black,gameName,newGame);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new ResponseException(500, String.format("Unable to read data: %s", e.getMessage()));
+        }
         return null;
     }
 

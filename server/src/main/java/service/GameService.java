@@ -4,6 +4,7 @@ import chess.ChessGame;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
+import dataaccess.ResponseException;
 import model.GameData;
 import service.responses.CreateGameRequest;
 import service.responses.CreateGameResponse;
@@ -39,7 +40,7 @@ public class GameService {
         }
         return responses;
     }
-    public void joinGame(JoinGameRequest req, String username) throws DataAccessException {
+    public void joinGame(JoinGameRequest req, String username) throws DataAccessException, ResponseException {
         ChessGame.TeamColor playerColor;
         if(Objects.equals(req.playerColor(), "BLACK")){
             playerColor = ChessGame.TeamColor.BLACK;

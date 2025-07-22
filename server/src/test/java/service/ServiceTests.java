@@ -115,7 +115,7 @@ public class ServiceTests {
         assertThrows(DataAccessException.class, () -> gameService.createGame(new CreateGameRequest(response.authToken(),null)));
     }
     @Test
-    public void positiveJoinGame() throws DataAccessException, SQLException {
+    public void positiveJoinGame() throws DataAccessException, SQLException, ResponseException {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserDAO userDAO = new MemoryUserDAO();
@@ -127,7 +127,7 @@ public class ServiceTests {
 
     }
     @Test
-    public void negativeJoinGame() throws DataAccessException, SQLException {
+    public void negativeJoinGame() throws DataAccessException, SQLException, ResponseException {
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserDAO userDAO = new MemoryUserDAO();

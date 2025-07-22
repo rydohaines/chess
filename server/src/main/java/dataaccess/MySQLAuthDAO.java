@@ -57,12 +57,29 @@ public class MySQLAuthDAO extends MySQLdata implements AuthDAO{
     }
 
     @Override
-    public void deleteAuth(String authToken) {
-
+    public void deleteAuth(String authToken) throws DataAccessException {
+    var conn = DatabaseManager.getConnection();
+    try(var ps = conn.prepareStatement("DELETE FROM auth WHERE authToken=?")) {
+        ps.setString(1,authToken);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
     }
 
     @Override
-    public String getUser(String authToken) {
-        return "";
+    public String getUser(String authToken) throws DataAccessException, SQLException {
+        var conn = DatabaseManager.getConnection();
+        try(var ps = conn.prepareStatement("SELECT username FROM auth WHERE authToken=?")) {
+            ps.setString(1,authToken);
+            try(var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                   return rs.getString(1);
+                }
+            }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+        return null;
     }
 }

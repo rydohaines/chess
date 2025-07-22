@@ -44,7 +44,7 @@ public class UserService {
 
 
     }
-    public void logout(LogoutRequest req) throws DataAccessException {
+    public void logout(LogoutRequest req) throws DataAccessException, SQLException {
         if(authDataAccess.getAuth(req.authToken()) == null){
             throw new DataAccessException("unauthorized");
         }

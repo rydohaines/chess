@@ -7,6 +7,8 @@ import service.responses.JoinGameRequest;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
+
 public class JoinGameHandler implements Handler {
     private final GameService service;
     public JoinGameHandler(GameService service){
@@ -14,7 +16,7 @@ public class JoinGameHandler implements Handler {
     }
 
     @Override
-    public Object handleRequest(Request req, Response res) throws DataAccessException {
+    public Object handleRequest(Request req, Response res) throws DataAccessException, SQLException {
         String authToken = req.headers("authorization");
         String username = authorizeToken(authToken,service.getAuthDataAccess());
         var gson = new Gson();

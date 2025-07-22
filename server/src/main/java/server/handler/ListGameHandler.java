@@ -8,6 +8,7 @@ import service.responses.ListGamesResult;
 import spark.Request;
 import spark.Response;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class ListGameHandler implements Handler {
@@ -17,7 +18,7 @@ public class ListGameHandler implements Handler {
     }
 
     @Override
-    public Object handleRequest(Request req, Response res) throws DataAccessException {
+    public Object handleRequest(Request req, Response res) throws DataAccessException, SQLException {
         String authToken = req.headers("authorization");
         authorizeToken(authToken,service.getAuthDataAccess());
         var gson = new Gson();

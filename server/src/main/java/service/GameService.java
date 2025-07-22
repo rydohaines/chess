@@ -40,7 +40,7 @@ public class GameService {
         }
         return responses;
     }
-    public void joinGame(JoinGameRequest req, String username) throws DataAccessException, ResponseException {
+    public void joinGame(JoinGameRequest req, String username) throws DataAccessException, ResponseException, SQLException {
         ChessGame.TeamColor playerColor;
         if(Objects.equals(req.playerColor(), "BLACK")){
             playerColor = ChessGame.TeamColor.BLACK;

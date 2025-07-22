@@ -3,12 +3,13 @@ package dataaccess;
 import chess.ChessGame;
 import model.GameData;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public interface GameDAO{
 void clearAll();
-int createGame(String gameName);
+int createGame(String gameName) throws DataAccessException, SQLException;
 Collection<GameData> listGames();
 GameData getGame(int gameID);
 void updateGame(int gameID, ChessGame.TeamColor playerColor, String username) throws DataAccessException;

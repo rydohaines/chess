@@ -10,6 +10,7 @@ import service.responses.CreateGameResponse;
 import service.responses.JoinGameRequest;
 import service.responses.ListGamesResponse;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public class GameService {
         this.gameDataAccess = gameDataAccess;
         this.authDataAccess = authDataAccess;
     }
-    public CreateGameResponse createGame(CreateGameRequest req) throws DataAccessException{
+    public CreateGameResponse createGame(CreateGameRequest req) throws DataAccessException, SQLException {
         if(req.gameName()== null){
             throw new DataAccessException("Bad Request");
         }

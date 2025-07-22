@@ -23,8 +23,11 @@ public class MySQLGameDAO extends MySQLdata implements GameDAO{
 """
     };
     @Override
-    public void clearAll() {
-
+    public void clearAll() throws SQLException, DataAccessException {
+        var conn = DatabaseManager.getConnection();
+        try(var ps = conn.prepareStatement("DELETE FROM game")){
+            ps.executeUpdate();
+        }
     }
 
     @Override
@@ -35,8 +38,13 @@ public class MySQLGameDAO extends MySQLdata implements GameDAO{
         try(var preparedStatement = conn.prepareStatement("INSERT INTO game (gameName, jsonGame) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1,gameName);
             preparedStatement.setString(2,json);
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
+            var rs = preparedStatement.getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
         }
+        return 0;
     }
 
     @Override

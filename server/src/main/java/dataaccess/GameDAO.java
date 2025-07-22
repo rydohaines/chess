@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public interface GameDAO{
-void clearAll();
+void clearAll() throws SQLException, DataAccessException;
 int createGame(String gameName) throws DataAccessException, SQLException;
 Collection<GameData> listGames();
 GameData getGame(int gameID);

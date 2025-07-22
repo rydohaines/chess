@@ -1,5 +1,7 @@
 package dataaccess;
 
+import model.UserData;
+
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -30,13 +32,28 @@ public class MySQLAuthDAO extends MySQLdata implements AuthDAO{
     };
 
     @Override
-    public void clearAll() {
-
+    public void clearAll() throws DataAccessException, SQLException {
+        var conn = DatabaseManager.getConnection();
+        try(var preparedStatment = conn.prepareStatement("DELETE FROM auth")){
+            preparedStatment.executeUpdate();
+        }
     }
 
     @Override
-    public String getAuth(String authToken) {
-        return "";
+    public String getAuth(String authToken) throws DataAccessException, SQLException {
+        var conn = DatabaseManager.getConnection();
+        var statement = "SELECT authToken FROM auth WHERE authToken=?";
+        try(var ps = conn.prepareStatement(statement)) {
+            ps.setString(1, authToken);
+            try (var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return authToken;
+                }
+            }
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+            return null;
     }
 
     @Override

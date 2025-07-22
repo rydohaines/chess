@@ -183,8 +183,30 @@ public class DataTests {
         assertNotNull(result.authToken());
     }
     @Test
-    public void DummyTest(){
+    public void dummyTest(){
         assertTrue(true);
+    }
+    @Test
+    public void correctPassword() throws Exception {
+        UserDAO userDAO = new MySQLUserDAO();
+        AuthDAO authDAO = new MySQLAuthDAO();
+        GameDAO gameDAO = new MySQLGameDAO();
+        UserService userService = new UserService(userDAO,authDAO);
+        userDAO.addUser(new UserData("newUser","password","email"));
+        String authToken = authDAO.addAuth("newUser");
+        LoginResponse response = userService.login(new LoginRequest("newUser","password"));
+        assertEquals("newUser",response.username());
+        assertNotNull(response.authToken());
+    }
+    @Test
+    public void wrongPassword() throws Exception {
+        UserDAO userDAO = new MySQLUserDAO();
+        AuthDAO authDAO = new MySQLAuthDAO();
+        GameDAO gameDAO = new MySQLGameDAO();
+        UserService userService = new UserService(userDAO,authDAO);
+        userDAO.addUser(new UserData("newUser","password","email"));
+        String authToken = authDAO.addAuth("newUser");
+        assertThrows(Exception.class, () -> userService.login(new LoginRequest("newUser","wrongpassword")));
     }
 
 }

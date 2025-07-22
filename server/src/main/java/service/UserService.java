@@ -37,8 +37,7 @@ public class UserService {
         if(user == null){
             throw new DataAccessException("unauthorized");
         }
-        String hashedPassword = BCrypt.hashpw(req.password(), BCrypt.gensalt());
-        if(BCrypt.checkpw(user.password(), hashedPassword)){
+        if(!BCrypt.checkpw(req.password(),user.password())){
             throw new DataAccessException("unauthorized");
         }
         authDataAccess.addAuth(req.username());

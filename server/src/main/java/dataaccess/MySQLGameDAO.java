@@ -52,11 +52,14 @@ public class MySQLGameDAO extends MySQLdata implements GameDAO{
     public Collection<GameData> listGames() throws ResponseException {
         var result = new ArrayList<GameData>();
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT gameID FROM game";
+            var statement = "SELECT gameID,whiteUsername, blackUsername,gameName,jsonGame FROM game";
             try (var ps = conn.prepareStatement(statement)) {
                 try (var rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        result.add(getGame(rs.getInt(1)));
+                        String gameName = rs.getString("gameName");
+                        var json = rs.getString("jsonGame");
+                        var newGame = new Gson().fromJson(json, ChessGame.class);
+                        result.add(new GameData(rs.getInt(1),rs.getString("whiteUsername"),rs.getString("blackUsername"),gameName,newGame));
                     }
                 }
             }

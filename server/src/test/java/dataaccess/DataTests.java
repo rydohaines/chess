@@ -154,6 +154,9 @@ public class DataTests {
         userDAO.clearAll();
         gameDAO.clearAll();
         userDAO.addUser(new UserData("alice", "pass", "alice@example.com")) ;
+        int gameID = gameDAO.createGame("game1");
+        int game2ID = gameDAO.createGame("game2");
+
         GameService gameService = new GameService(gameDAO, authDAO);
         Collection<ListGamesResponse> games = gameService.listGames();
         ListGamesResult result = new ListGamesResult(games);

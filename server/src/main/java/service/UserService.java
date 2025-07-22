@@ -2,6 +2,7 @@ package service;
 
 import dataaccess.*;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import service.responses.*;
 
 import java.sql.SQLException;
@@ -36,7 +37,8 @@ public class UserService {
         if(user == null){
             throw new DataAccessException("unauthorized");
         }
-        if(!Objects.equals(user.password(), req.password())){
+        String hashedPassword = BCrypt.hashpw(req.password(), BCrypt.gensalt());
+        if(BCrypt.checkpw(user.password(), hashedPassword)){
             throw new DataAccessException("unauthorized");
         }
         authDataAccess.addAuth(req.username());

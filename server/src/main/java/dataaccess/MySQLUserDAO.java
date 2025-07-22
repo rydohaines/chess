@@ -2,6 +2,7 @@ package dataaccess;
 
 import com.google.gson.Gson;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +30,8 @@ public class MySQLUserDAO extends MySQLdata implements UserDAO{
                 try (var rs = ps.executeQuery()) {
                     if (rs.next()) {
                         var name = rs.getString(1);
-                        return new UserData(name,rs.getString("password"),rs.getString("email"));
+                        var password = rs.getString("password");
+                        return new UserData(name,password,rs.getString("email"));
                     }
                 }
             }
@@ -44,7 +46,8 @@ public class MySQLUserDAO extends MySQLdata implements UserDAO{
         var conn  = DatabaseManager.getConnection();
         try(var preparedStatement = conn.prepareStatement("INSERT INTO user (username, password, email) VALUES (?, ?, ?)")){
             preparedStatement.setString(1, userData.username());
-            preparedStatement.setString(2, userData.password());
+            String hashedPassword = BCrypt.hashpw(userData.password(), BCrypt.gensalt());
+            preparedStatement.setString(2, hashedPassword);
             preparedStatement.setString(3, userData.email());
             preparedStatement.executeUpdate();
     }

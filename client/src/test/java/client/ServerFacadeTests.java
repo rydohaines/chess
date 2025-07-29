@@ -3,6 +3,11 @@ package client;
 import org.junit.jupiter.api.*;
 import server.Server;
 import server.ServerFacade;
+import server.handler.ClearHandler;
+import service.responses.RegisterRequest;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class ServerFacadeTests {
@@ -22,10 +27,21 @@ public class ServerFacadeTests {
         server.stop();
     }
 
+    @BeforeEach
+    void clearAll() throws Exception {
+        facade.clearAll();
+    }
 
     @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
+    public void positiveRegisterTest() throws Exception {
+        var authData = facade.register(new RegisterRequest("username","password","email"));
+        assertTrue(authData.authToken().length() > 10);
+    }
+
+    @Test
+    public void negativeRegisterTest() throws Exception{
+        facade.register(new RegisterRequest("username","password","email"));
+        assertThrows(Exception.class,  () -> facade.register(new RegisterRequest("username","password","email")));
     }
 
 }

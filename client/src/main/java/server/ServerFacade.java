@@ -1,7 +1,8 @@
 package server;
 
 import com.google.gson.Gson;
-import service.responses.*;
+import reponses.*;
+
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -75,6 +75,9 @@ public class LoginClient implements Client {
         StringBuilder output = new StringBuilder();
         ListGamesResult result = serverFacade.list(authToken);
         Collection<ListGamesResponse> games = result.games();
+        if(games.isEmpty()){
+            return "No games created. Type 'help' to see commands";
+        }
         int i = 1;
         for (ListGamesResponse game : games) {
             listGameMap.put(i, game.gameID());

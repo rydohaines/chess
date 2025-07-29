@@ -76,5 +76,29 @@ public class ServerFacadeTests {
     public void negativeLogout() throws Exception{
         assertThrows(Exception.class, () -> facade.logout(new LogoutRequest("invalid auth")));
     }
-
+    @Test
+    public void positiveListGame() throws Exception{
+        var authData = facade.register(new RegisterRequest("user","pass","email"));
+        assertNotNull(facade.create(new CreateGameRequest(authData.authToken(),"newgame")));
+        assertNotNull(facade.list(authData.authToken()));
+    }
+    @Test
+    public void negativeListGames() throws Exception{
+        var authData = facade.register(new RegisterRequest("user","pass","email"));
+        assertTrue(facade.list(authData.authToken()).games().isEmpty());
+    }
+    @Test
+    public void positiveJoinGame() throws Exception{
+        var authData = facade.register(new RegisterRequest("user","pass","email"));
+        CreateGameResponse response = facade.create(new CreateGameRequest(authData.authToken(), "newGame"));
+        facade.join(new JoinGameRequest("white",response.gameID(), authData.username()), authData.authToken());
+        assertFalse(facade.list(authData.authToken()).games().isEmpty());
+    }
+    @Test
+    public void negativeJoinGame() throws Exception{
+        var authData = facade.register(new RegisterRequest("user","pass","email"));
+        CreateGameResponse response = facade.create(new CreateGameRequest(authData.authToken(), "newGame"));
+        facade.join(new JoinGameRequest("white",response.gameID(), authData.username()), authData.authToken());
+        assertThrows(Exception.class, () -> facade.join(new JoinGameRequest("white",response.gameID(), authData.username()), authData.authToken()));
+    }
 }

@@ -1,12 +1,17 @@
 package repls;
 
+import chess.ChessBoard;
 import dataaccess.ResponseException;
 import server.ServerFacade;
 import service.responses.*;
+import ui.BoardDrawer;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static repls.ClientStatus.*;
+import static ui.EscapeSequences.*;
 
 public class LoginClient implements Client {
     private final ServerFacade serverFacade;
@@ -114,6 +119,7 @@ public class LoginClient implements Client {
                 throw new ResponseException(400, "please enter 'WHITE' or 'BLACK'");
             }
             status = GAMESTATUS;
+            this.drawBoard();
         return "Joined game as " + params[1];
     }
     public String logout() throws Exception {
@@ -164,9 +170,13 @@ public class LoginClient implements Client {
             throw new ResponseException(400, "Cannot preform action, you are already signed in");
         }
     }
-    private void asserInGame() throws ResponseException{
+    private void assertInGame() throws ResponseException{
         if(status != GAMESTATUS){
             throw new ResponseException(400, "invalid command you are in a game.");
         }
+    }
+    private void drawBoard(){
+        BoardDrawer drawer = new BoardDrawer();
+        drawer.drawStandardBoardWhite();
     }
 }

@@ -93,4 +93,12 @@ public class ServerFacade {
         var path = "/session";
         this.makeRequest("DELETE",path, request, null,request.authToken());
     }
-}
+    public ListGamesResult list(ListGamesResponse request, String authToken) throws Exception {
+        var path = "/game";
+        return this.makeRequest("GET", path, request,ListGamesResult.class,authToken);
+    }
+    public void join(JoinGameRequest request, String authToken) throws Exception {
+        var path = "/game";
+        this.makeRequest("PUT",path,request,null, authToken);
+    }
+    }

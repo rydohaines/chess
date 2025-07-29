@@ -42,9 +42,10 @@ public class GameService {
     }
     public void joinGame(JoinGameRequest req, String username) throws DataAccessException, ResponseException, SQLException {
         ChessGame.TeamColor playerColor;
-        if(Objects.equals(req.playerColor(), "BLACK")){
+        String requestColor = req.playerColor().toLowerCase();
+        if(Objects.equals(requestColor, "black")){
             playerColor = ChessGame.TeamColor.BLACK;
-        }else if(Objects.equals(req.playerColor(), "WHITE")){
+        }else if(Objects.equals(requestColor, "white")){
             playerColor = ChessGame.TeamColor.WHITE;
         }
         else {

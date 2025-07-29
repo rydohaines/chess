@@ -5,6 +5,7 @@ import server.ServerFacade;
 import service.responses.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import static repls.ClientStatus.*;
 
@@ -14,6 +15,7 @@ public class LoginClient implements Client {
     private final Repl repl;
     private ClientStatus status = PRELOGIN;
     private String authToken = null;
+    private String currentUser = null;
 
     public LoginClient(String serverUrl, Repl repl) {
         this.serverUrl = serverUrl;
@@ -55,17 +57,41 @@ public class LoginClient implements Client {
                 case "create" -> create(params);
                 case"logout" -> logout();
                 case "quit" -> "quit";
+                case"join"-> join(params);
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
     }
+    public String join(String ... params) throws Exception {
+        assertSignedIn();
+        int gameID;
+        try {
+            gameID = Integer.parseInt(params[0]);
+        } catch (NumberFormatException e) {
+            throw new ResponseException(400, "Invalid game ID: please enter a valid number");
+        }
+                if (Objects.equals(params[1], "black")) {
+                JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
+                serverFacade.join(request,authToken);
+            } else if (Objects.equals(params[1], "white")) {
+                JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
+                serverFacade.join(request,authToken);
+            }
+            else{
+                throw new ResponseException(400, "please enter 'WHITE' or 'BLACK'");
+            }
+            status = GAMESTATUS;
+        return "Joined game as " + params[1];
+    }
     public String logout() throws Exception {
         assertSignedIn();
         LogoutRequest request = new LogoutRequest(authToken);
         serverFacade.logout(request);
         status = PRELOGIN;
+        authToken = null;
+        currentUser = null;
         return "You have logged out. Type 'help' for more options";
     }
 
@@ -74,6 +100,7 @@ public class LoginClient implements Client {
         LoginRequest request = new LoginRequest(params[0], params[1]);
         LoginResponse response = serverFacade.login(request);
         authToken = response.authToken();
+        currentUser = response.username();
         status = POSTLOGIN;
         System.out.println("Setting auth token to: " + authToken);
         return "You logged in as " + response.username();
@@ -84,6 +111,7 @@ public class LoginClient implements Client {
         RegisterRequest request = new RegisterRequest(params[0], params[1], params[2]);
         RegisterResponse response = serverFacade.register(request);
         status = POSTLOGIN;
+        currentUser = response.username();
         authToken = response.authToken();
         return "You logged in as " + response.username();
     }

@@ -1,6 +1,5 @@
 package repls;
 
-import dataaccess.ResponseException;
 import server.ServerFacade;
 import service.responses.*;
 import ui.BoardDrawer;
@@ -108,7 +107,7 @@ public class LoginClient implements Client {
             }
             gameID = listGameMap.get(Integer.parseInt(params[0]));
         } catch (NumberFormatException e) {
-            throw new ResponseException(400, "Invalid game ID: please enter a valid number");
+            throw new Exception("Invalid game ID: please enter a valid number");
         }
                 if (Objects.equals(params[1], "black")) {
                 JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
@@ -120,7 +119,7 @@ public class LoginClient implements Client {
                     this.drawBoard();
             }
             else{
-                throw new ResponseException(400, "please enter 'WHITE' or 'BLACK'");
+                throw new Exception("please enter 'WHITE' or 'BLACK'");
             }
             status = GAMESTATUS;
         return "Joined game as " + params[1];
@@ -160,22 +159,22 @@ public class LoginClient implements Client {
         CreateGameResponse response = serverFacade.create(new CreateGameRequest(authToken, params[0]));
         return "You created game: " + params[0] +" type 'list' to see all games";
     }
-    private void assertSignedIn() throws ResponseException {
+    private void assertSignedIn() throws Exception {
         if (status == PRELOGIN) {
-            throw new ResponseException(400, "You must sign in");
+            throw new Exception( "You must sign in");
         }
         if(status == GAMESTATUS){
-            throw new ResponseException(400, "You are in a game please exit to preform command");
+            throw new Exception("You are in a game please exit to preform command");
         }
     }
-    private void assertSignedOut() throws ResponseException{
+    private void assertSignedOut() throws Exception{
         if(status != PRELOGIN){
-            throw new ResponseException(400, "Cannot preform action, you are already signed in");
+            throw new Exception("Cannot preform action, you are already signed in");
         }
     }
-    private void assertInGame() throws ResponseException{
+    private void assertInGame() throws Exception{
         if(status != GAMESTATUS){
-            throw new ResponseException(400, "invalid command you are in a game.");
+            throw new Exception("invalid command you are in a game.");
         }
     }
     private void drawBoard(){

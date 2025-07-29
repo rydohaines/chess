@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
-import service.responses.*;
+import responses.*;
 
 import java.sql.SQLException;
 import java.util.Collection;

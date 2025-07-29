@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import server.ServerFacade;
 import server.handler.ClearHandler;
-import service.responses.*;
+import responses.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

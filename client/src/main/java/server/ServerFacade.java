@@ -1,7 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
-import reponses.*;
+import responses.*;
 
 
 import java.io.InputStream;
@@ -63,6 +63,8 @@ public class ServerFacade {
                 if (responseClass != null) {
                     response = new Gson().fromJson(reader, responseClass);
                 }
+            }catch (Exception ex){
+                throw new Exception(ex.toString());
             }
         }
         return response;
@@ -85,7 +87,7 @@ public class ServerFacade {
     }
     public void logout(LogoutRequest request) throws Exception{
         var path = "/session";
-        this.makeRequest("DELETE",path, request, null,request.authToken());
+        this.makeRequest("DELETE",path, null, null,request.authToken());
     }
     public ListGamesResult list (String authToken) throws Exception {
         var path = "/game";

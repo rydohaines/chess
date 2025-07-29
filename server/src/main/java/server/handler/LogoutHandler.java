@@ -1,7 +1,7 @@
 package server.handler;
 
 import dataaccess.DataAccessException;
-import service.responses.LogoutRequest;
+import responses.LogoutRequest;
 import service.UserService;
 import spark.Request;
 import spark.Response;

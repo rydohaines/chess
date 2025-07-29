@@ -1,4 +1,4 @@
-package reponses;
+package responses;
 
 import java.util.Collection;
 

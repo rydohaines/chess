@@ -1,6 +1,6 @@
 package repls;
 
-import reponses.*;
+import responses.*;
 import server.ServerFacade;
 import ui.BoardDrawer;
 

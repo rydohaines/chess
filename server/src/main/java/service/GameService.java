@@ -6,10 +6,7 @@ import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.ResponseException;
 import model.GameData;
-import service.responses.CreateGameRequest;
-import service.responses.CreateGameResponse;
-import service.responses.JoinGameRequest;
-import service.responses.ListGamesResponse;
+import responses.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,6 +39,9 @@ public class GameService {
     }
     public void joinGame(JoinGameRequest req, String username) throws DataAccessException, ResponseException, SQLException {
         ChessGame.TeamColor playerColor;
+        if(req.playerColor() == null){
+            throw new DataAccessException("Bad Request");
+        }
         String requestColor = req.playerColor().toLowerCase();
         if(Objects.equals(requestColor, "black")){
             playerColor = ChessGame.TeamColor.BLACK;

@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.ResponseException;
 import service.*;
-import service.responses.LoginRequest;
-import service.responses.LoginResponse;
+import responses.LoginRequest;
+import responses.LoginResponse;
 import spark.Request;
 import spark.Response;
 

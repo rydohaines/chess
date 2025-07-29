@@ -2,7 +2,7 @@ package service;
 
 import dataaccess.*;
 import model.UserData;
-import service.responses.*;
+import responses.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

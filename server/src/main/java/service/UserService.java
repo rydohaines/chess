@@ -3,7 +3,7 @@ package service;
 import dataaccess.*;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
-import service.responses.*;
+import responses.*;
 
 import java.sql.SQLException;
 import java.util.Objects;

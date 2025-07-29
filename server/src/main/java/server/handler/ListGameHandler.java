@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import dataaccess.ResponseException;
 import service.GameService;
-import service.responses.ListGamesResponse;
-import service.responses.ListGamesResult;
+import responses.ListGamesResponse;
+import responses.ListGamesResult;
 import spark.Request;
 import spark.Response;
 

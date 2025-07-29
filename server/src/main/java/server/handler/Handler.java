@@ -1,5 +1,6 @@
 package server.handler;
 
+import responses.*;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.ResponseException;

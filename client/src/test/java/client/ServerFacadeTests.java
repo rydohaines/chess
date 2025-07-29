@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import server.ServerFacade;
 import server.handler.ClearHandler;
+import service.responses.LoginRequest;
 import service.responses.RegisterRequest;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,6 +43,18 @@ public class ServerFacadeTests {
     public void negativeRegisterTest() throws Exception{
         facade.register(new RegisterRequest("username","password","email"));
         assertThrows(Exception.class,  () -> facade.register(new RegisterRequest("username","password","email")));
+    }
+
+    @Test
+    public void positiveLoginTest() throws Exception{
+        facade.register(new RegisterRequest("username","password","email"));
+        var authData = facade.login(new LoginRequest("username","password"));
+        assertTrue(authData.authToken().length() > 10);
+    }
+    @Test
+    public void negativeLoginTest() throws Exception{
+        facade.register(new RegisterRequest("username","password","email"));
+        assertThrows(Exception.class, () -> facade.login(new LoginRequest("username","WRONGpassword")));
     }
 
 }

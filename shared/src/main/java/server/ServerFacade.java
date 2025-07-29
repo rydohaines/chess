@@ -50,10 +50,10 @@ public class ServerFacade {
         this.makeRequest("DELETE",path,null,null,null);
     }
     private static void writeBody(Object request, HttpURLConnection http,String header) throws Exception {
+        if(header != null) {
+            http.addRequestProperty("authorization", header);
+        }
         if (request != null) {
-            if(header != null) {
-                http.addRequestProperty("authorization", header);
-            }
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
@@ -78,7 +78,7 @@ public class ServerFacade {
         switch(status){
             case 400-> throw new Exception("Bad Request Please Try Again");
             case 401-> throw new Exception("Unauthorized, try a different password");
-            case 403-> throw new Exception("Username Already Taken");
+            case 403-> throw new Exception("Already Taken");
         }
     }
     private boolean isSuccessful(int status) {
@@ -93,9 +93,9 @@ public class ServerFacade {
         var path = "/session";
         this.makeRequest("DELETE",path, request, null,request.authToken());
     }
-    public ListGamesResult list(ListGamesResponse request, String authToken) throws Exception {
+    public ListGamesResult list (String authToken) throws Exception {
         var path = "/game";
-        return this.makeRequest("GET", path, request,ListGamesResult.class,authToken);
+        return this.makeRequest("GET", path, null,ListGamesResult.class,authToken);
     }
     public void join(JoinGameRequest request, String authToken) throws Exception {
         var path = "/game";

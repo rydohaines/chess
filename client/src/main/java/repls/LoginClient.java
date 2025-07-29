@@ -4,8 +4,7 @@ import dataaccess.ResponseException;
 import server.ServerFacade;
 import service.responses.*;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 import static repls.ClientStatus.*;
 
@@ -16,6 +15,7 @@ public class LoginClient implements Client {
     private ClientStatus status = PRELOGIN;
     private String authToken = null;
     private String currentUser = null;
+    private Map<Integer,Integer> listGameMap = new HashMap<>();
 
     public LoginClient(String serverUrl, Repl repl) {
         this.serverUrl = serverUrl;
@@ -43,7 +43,12 @@ public class LoginClient implements Client {
                     help - with possible commands
                     """;
         }
-        return null;
+        else{
+            return """
+                    quit - playing chess
+                    help - see possible commands
+                    """;
+        }
     }
 
     public String eval(String line) {
@@ -58,17 +63,40 @@ public class LoginClient implements Client {
                 case"logout" -> logout();
                 case "quit" -> "quit";
                 case"join"-> join(params);
+                case"list" -> list(params);
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
     }
+    public String list(String ... params) throws Exception {
+        assertSignedIn();
+        StringBuilder output = new StringBuilder();
+        ListGamesResult result = serverFacade.list(authToken);
+        Collection<ListGamesResponse> games = result.games();
+        int i = 1;
+        for (ListGamesResponse game : games) {
+            listGameMap.put(i, game.gameID());
+            output.append(String.format(
+                    "%d. Name: %s, White: %s, Black: %s%n",
+                    i++,
+                    game.gameName(),
+                    game.whiteUsername() != null ? game.whiteUsername() : "none",
+                    game.blackUsername() != null ? game.blackUsername() : "none"
+            ));
+
+        }
+        return output.toString();
+    }
     public String join(String ... params) throws Exception {
         assertSignedIn();
         int gameID;
         try {
-            gameID = Integer.parseInt(params[0]);
+            if(listGameMap.isEmpty()){
+                throw new Exception("Please list games before trying to join");
+            }
+            gameID = listGameMap.get(Integer.parseInt(params[0]));
         } catch (NumberFormatException e) {
             throw new ResponseException(400, "Invalid game ID: please enter a valid number");
         }
@@ -102,7 +130,6 @@ public class LoginClient implements Client {
         authToken = response.authToken();
         currentUser = response.username();
         status = POSTLOGIN;
-        System.out.println("Setting auth token to: " + authToken);
         return "You logged in as " + response.username();
     }
 
@@ -119,11 +146,14 @@ public class LoginClient implements Client {
     public String create(String... params) throws Exception {
         assertSignedIn();
         CreateGameResponse response = serverFacade.create(new CreateGameRequest(authToken, params[0]));
-        return "You created game: " + params[0] + "with gameID " + response.gameID();
+        return "You created game: " + params[0] +" type 'list' to see all games";
     }
     private void assertSignedIn() throws ResponseException {
-        if (status != POSTLOGIN) {
+        if (status == PRELOGIN) {
             throw new ResponseException(400, "You must sign in");
+        }
+        if(status == GAMESTATUS){
+            throw new ResponseException(400, "You are in a game please exit to preform command");
         }
     }
     private void assertSignedOut() throws ResponseException{

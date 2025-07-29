@@ -34,7 +34,7 @@ public class GameService {
     }
     public Collection<ListGamesResponse> listGames() throws ResponseException {
         Collection <GameData> games = gameDataAccess.listGames();
-        Collection < ListGamesResponse> responses = new ArrayList<>();
+        Collection <ListGamesResponse> responses = new ArrayList<>();
         for(GameData game : games){
             responses.add(new ListGamesResponse(game.gameID(),game.whiteUsername(),game.blackUsername(),game.gameName()));
         }

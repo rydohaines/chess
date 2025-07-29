@@ -4,11 +4,12 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import server.ServerFacade;
 import server.handler.ClearHandler;
+import service.responses.CreateGameRequest;
+import service.responses.CreateGameResponse;
 import service.responses.LoginRequest;
 import service.responses.RegisterRequest;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
@@ -58,4 +59,14 @@ public class ServerFacadeTests {
         assertThrows(Exception.class, () -> facade.login(new LoginRequest("username","WRONGpassword")));
     }
 
+    @Test
+    public void positiveCreateGame() throws Exception{
+        var authData = facade.register(new RegisterRequest("newUser", "password","email"));
+        CreateGameResponse gameID = facade.create(new CreateGameRequest(authData.authToken(),"newGame"));
+        assertNotNull(gameID);
+    }
+    @Test
+    public void negativeCreateGame() throws Exception{
+        assertThrows(Exception.class, () -> facade.create(new CreateGameRequest("invaild auth", "name ")));
+    }
 }

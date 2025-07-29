@@ -197,11 +197,11 @@ public class LoginClient implements Client {
             throw new Exception("Cannot preform action, you are already signed in");
         }
     }
-    private void assertInGame() throws Exception{
-        if(status != GAMESTATUS){
-            throw new Exception("invalid command you are in a game.");
-        }
-    }
+    //private void assertInGame() throws Exception{
+        //if(status != GAMESTATUS){
+            //throw new Exception("invalid command you are in a game.");
+        //}
+    //}
     private void drawBoard(){
         BoardDrawer drawer = new BoardDrawer();
         drawer.drawStandardBoardWhite();

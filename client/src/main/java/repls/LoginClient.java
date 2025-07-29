@@ -118,15 +118,16 @@ public class LoginClient implements Client {
                 if (Objects.equals(params[1], "black")) {
                 JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
                 serverFacade.join(request,authToken);
-            } else if (Objects.equals(params[1], "white")) {
+                this.drawBlackBoard();
+                } else if (Objects.equals(params[1], "white")) {
                 JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
                 serverFacade.join(request,authToken);
+                    this.drawBoard();
             }
             else{
                 throw new ResponseException(400, "please enter 'WHITE' or 'BLACK'");
             }
             status = GAMESTATUS;
-            this.drawBoard();
         return "Joined game as " + params[1];
     }
     public String logout() throws Exception {
@@ -185,5 +186,9 @@ public class LoginClient implements Client {
     private void drawBoard(){
         BoardDrawer drawer = new BoardDrawer();
         drawer.drawStandardBoardWhite();
+    }
+    private void drawBlackBoard(){
+        BoardDrawer drawer = new BoardDrawer();
+        drawer.drawBoardBlack();
     }
 }

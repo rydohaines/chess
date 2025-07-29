@@ -80,6 +80,7 @@ public class LoginClient implements Client {
     }
 
     public String create(String... params) throws Exception {
+        System.out.println("auth token is: " + authToken);
         CreateGameResponse response = serverFacade.create(new CreateGameRequest(authToken, params[0]));
         return "You created game: " + params[0] + "with gameID " + response.gameID();
     }

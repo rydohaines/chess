@@ -23,8 +23,8 @@ public class UserService {
         }
         if (dataAccess.getUser(req.username()) == null) {
             dataAccess.addUser(user);
-            authDataAccess.addAuth(user.username());
-            return new RegisterResponse(req.username(), authDataAccess.addAuth(req.username()));
+            String authData = authDataAccess.addAuth(user.username());
+            return new RegisterResponse(req.username(), authData);
         } else{
             throw new DataAccessException("Already Taken");
         }

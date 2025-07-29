@@ -20,14 +20,13 @@ public class ServerFacade {
     public ServerFacade(int port) {
     serverUrl = "http://localhost:"+port;
     }
-    public <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws Exception{
+    public <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, String header) throws Exception{
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
-
-            writeBody(request, http);
+            writeBody(request, http,header);
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
@@ -40,18 +39,21 @@ public class ServerFacade {
 
     public RegisterResponse register(RegisterRequest request) throws Exception {
         var path = "/user";
-        return this.makeRequest("POST",path, request,RegisterResponse.class);
+        return this.makeRequest("POST",path, request,RegisterResponse.class, null);
     }
     public LoginResponse login(LoginRequest request) throws Exception{
         var path = "/session";
-        return this.makeRequest("POST",path,request,LoginResponse.class);
+        return this.makeRequest("POST",path,request,LoginResponse.class, null);
     }
     public void clearAll() throws Exception {
         var path = "/db";
-        this.makeRequest("DELETE",path,null,null);
+        this.makeRequest("DELETE",path,null,null,null);
     }
-    private static void writeBody(Object request, HttpURLConnection http) throws Exception {
+    private static void writeBody(Object request, HttpURLConnection http,String header) throws Exception {
         if (request != null) {
+            if(header != null) {
+                http.addRequestProperty("authorization", header);
+            }
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
@@ -85,6 +87,6 @@ public class ServerFacade {
 
     public CreateGameResponse create(CreateGameRequest request) throws Exception {
         var path = "/game";
-        return this.makeRequest("POST", path,request,CreateGameResponse.class);
+        return this.makeRequest("POST", path,request,CreateGameResponse.class,request.authToken());
     }
 }

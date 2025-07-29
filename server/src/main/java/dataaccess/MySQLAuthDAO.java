@@ -19,7 +19,6 @@ public class MySQLAuthDAO extends MySQLdata implements AuthDAO{
             preparedStatment.setString(2,authToken);
             preparedStatment.executeUpdate();
         }
-
         return authToken;
     }
     private final String[] createStatements = {

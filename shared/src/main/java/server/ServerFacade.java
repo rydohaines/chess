@@ -89,4 +89,8 @@ public class ServerFacade {
         var path = "/game";
         return this.makeRequest("POST", path,request,CreateGameResponse.class,request.authToken());
     }
+    public void logout(LogoutRequest request) throws Exception{
+        var path = "/session";
+        this.makeRequest("DELETE",path, request, null,request.authToken());
+    }
 }

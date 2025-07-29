@@ -53,12 +53,19 @@ public class LoginClient implements Client {
                 case "register" -> register(params);
                 case "login" -> login(params);
                 case "create" -> create(params);
+                case"logout" -> logout();
                 case "quit" -> "quit";
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+    public String logout() throws Exception {
+        LogoutRequest request = new LogoutRequest(authToken);
+        serverFacade.logout(request);
+        status = PRELOGIN;
+        return "You have logged out. Type 'help' for more options";
     }
 
     public String login(String... params) throws Exception {

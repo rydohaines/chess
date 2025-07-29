@@ -4,10 +4,7 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import server.ServerFacade;
 import server.handler.ClearHandler;
-import service.responses.CreateGameRequest;
-import service.responses.CreateGameResponse;
-import service.responses.LoginRequest;
-import service.responses.RegisterRequest;
+import service.responses.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,4 +66,15 @@ public class ServerFacadeTests {
     public void negativeCreateGame() throws Exception{
         assertThrows(Exception.class, () -> facade.create(new CreateGameRequest("invaild auth", "name ")));
     }
+    @Test
+    public void positiveLogout() throws Exception{
+        var authData = facade.register(new RegisterRequest("ryan", "haines","email"));
+        facade.logout(new LogoutRequest(authData.authToken()));
+        assertThrows(Exception.class, ()-> facade.create(new CreateGameRequest(authData.authToken(), "game")));
+    }
+    @Test
+    public void negativeLogout() throws Exception{
+        assertThrows(Exception.class, () -> facade.logout(new LogoutRequest("invalid auth")));
+    }
+
 }

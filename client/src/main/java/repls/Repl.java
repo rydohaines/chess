@@ -1,13 +1,16 @@
 package repls;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
 public class Repl {
-    private final LoginClient client;
+    private Client client;
+    private String serverUrl;
     public Repl(String serverUrl) {
         client = new LoginClient (serverUrl,this);
+        this.serverUrl = serverUrl;
     }
     public void run(){
         System.out.println("\uD83D\uDC36 Welcome to the Chess Client. Sign in to start.");

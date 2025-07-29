@@ -2,10 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.ResponseException;
-import service.responses.LoginRequest;
-import service.responses.LoginResponse;
-import service.responses.RegisterRequest;
-import service.responses.RegisterResponse;
+import service.responses.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,5 +81,10 @@ public class ServerFacade {
     }
     private boolean isSuccessful(int status) {
         return status / 100 == 2;
+    }
+
+    public CreateGameResponse create(CreateGameRequest request) throws Exception {
+        var path = "/game";
+        return this.makeRequest("POST", path,request,CreateGameResponse.class);
     }
 }

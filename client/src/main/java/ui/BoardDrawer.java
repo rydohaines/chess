@@ -1,6 +1,6 @@
 package ui;
 
-import javax.sound.sampled.Line;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
@@ -47,7 +47,6 @@ public class BoardDrawer {
     }
 
     private static void drawHeader(PrintStream out, String headerText) {
-        int padding = (SQUARE_SIZE_IN_PADDED_CHARS)/2 -1;
         out.print(EMPTY);
         printHeaderText(out, headerText);
         out.print(EMPTY);
@@ -143,20 +142,6 @@ public class BoardDrawer {
         }
     }
 
-    private static void drawHorizontalLine(PrintStream out) {
-
-        int boardSizeInSpaces = BOARD_SIZE_IN_SQUARES * SQUARE_SIZE_IN_PADDED_CHARS +
-                (BOARD_SIZE_IN_SQUARES - 1) * LINE_WIDTH_IN_PADDED_CHARS;
-
-        for (int lineRow = 0; lineRow < LINE_WIDTH_IN_PADDED_CHARS; ++lineRow) {
-            setRed(out);
-            out.print(EMPTY.repeat(boardSizeInSpaces));
-
-            setBlack(out);
-            out.println();
-        }
-    }
-
     private static void setWhite(PrintStream out) {
         out.print(SET_BG_COLOR_WHITE);
         out.print(SET_TEXT_COLOR_WHITE);
@@ -176,12 +161,4 @@ public class BoardDrawer {
         out.print(SET_TEXT_COLOR_LIGHT_GREY);
     }
 
-    private static void printPlayer(PrintStream out, String player) {
-        out.print(SET_BG_COLOR_WHITE);
-        out.print(SET_TEXT_COLOR_BLACK);
-
-        out.print(player);
-
-        setWhite(out);
-    }
 }

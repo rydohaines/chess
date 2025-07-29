@@ -1,29 +1,24 @@
 package repls;
 
-import chess.ChessBoard;
 import dataaccess.ResponseException;
 import server.ServerFacade;
 import service.responses.*;
 import ui.BoardDrawer;
 
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
+
 import java.util.*;
 
 import static repls.ClientStatus.*;
-import static ui.EscapeSequences.*;
 
 public class LoginClient implements Client {
     private final ServerFacade serverFacade;
-    private final String serverUrl;
     private final Repl repl;
     private ClientStatus status = PRELOGIN;
     private String authToken = null;
     private String currentUser = null;
-    private Map<Integer,Integer> listGameMap = new HashMap<>();
+    private final Map<Integer,Integer> listGameMap = new HashMap<>();
 
     public LoginClient(String serverUrl, Repl repl) {
-        this.serverUrl = serverUrl;
         serverFacade = new ServerFacade(serverUrl);
         this.repl = repl;
     }

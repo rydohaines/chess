@@ -1,6 +1,8 @@
 package repls;
 
 import server.ServerFacade;
+import service.responses.LoginRequest;
+import service.responses.LoginResponse;
 import service.responses.RegisterRequest;
 import service.responses.RegisterResponse;
 
@@ -30,12 +32,18 @@ public class LoginClient {
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
                 case "register" -> register(params);
+                case "login" -> login(params);
                 case "quit" -> "quit";
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+    public String login(String ... params) throws Exception {
+        LoginRequest request = new LoginRequest(params[0],params[1]);
+        LoginResponse response = serverFacade.login(request);
+        return "You logged in as " + response.username();
     }
     public String register(String ... params) throws Exception {
         RegisterRequest request = new RegisterRequest(params[0],params[1],params[2]);

@@ -2,8 +2,7 @@ package repls;
 
 import java.util.Scanner;
 
-import static ui.EscapeSequences.SET_BG_COLOR_GREEN;
-import static ui.EscapeSequences.SET_TEXT_COLOR_BLUE;
+import static ui.EscapeSequences.*;
 
 public class Repl {
     private final LoginClient client;
@@ -31,6 +30,6 @@ public class Repl {
         System.out.println();
     }
     private void printPrompt() {
-        System.out.print("\n" + ">>> " + SET_BG_COLOR_GREEN);
+        System.out.print("\n" + ">>> " + SET_BG_COLOR_WHITE);
     }
 }

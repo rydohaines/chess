@@ -2,6 +2,8 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.ResponseException;
+import service.responses.LoginRequest;
+import service.responses.LoginResponse;
 import service.responses.RegisterRequest;
 import service.responses.RegisterResponse;
 
@@ -43,6 +45,10 @@ public class ServerFacade {
         var path = "/user";
         return this.makeRequest("POST",path, request,RegisterResponse.class);
     }
+    public LoginResponse login(LoginRequest request) throws Exception{
+        var path = "/session";
+        return this.makeRequest("POST",path,request,LoginResponse.class);
+    }
     public void clearAll() throws Exception {
         var path = "/db";
         this.makeRequest("DELETE",path,null,null);
@@ -70,14 +76,10 @@ public class ServerFacade {
     }
     private void throwIfNotSuccessful(HttpURLConnection http) throws Exception {
         var status = http.getResponseCode();
-        if (!isSuccessful(status)) {
-            try (InputStream respErr = http.getErrorStream()) {
-                if (respErr != null) {
-                    throw new Exception(respErr.toString());
-                }
-            }
-
-            throw new ResponseException(status, "other failure: " + status);
+        switch(status){
+            case 400-> throw new Exception("Bad Request Please Try Again");
+            case 401-> throw new Exception("Unauthorized, try a different password");
+            case 403-> throw new Exception("Username Already Taken");
         }
     }
     private boolean isSuccessful(int status) {

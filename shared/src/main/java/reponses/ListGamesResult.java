@@ -1,4 +1,4 @@
-package service.responses;
+package reponses;
 
 import java.util.Collection;
 

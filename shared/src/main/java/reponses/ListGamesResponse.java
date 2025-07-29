@@ -1,4 +1,4 @@
-package service.responses;
+package reponses;
 
 public record ListGamesResponse(int gameID, String whiteUsername,String blackUsername,String gameName) {
 }

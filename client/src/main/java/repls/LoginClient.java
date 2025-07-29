@@ -71,7 +71,20 @@ public class LoginClient implements Client {
         }
     }
 
-    private String observe(String[] params) {
+    private String observe(String[] params) throws Exception {
+        assertSignedIn();
+        if(params.length != 1){
+            throw new Exception("invalid input, try again.");
+        }
+        int gameID;
+        try {
+            if(listGameMap.isEmpty()){
+                throw new Exception("Please list games before trying to join");
+            }
+            gameID = listGameMap.get(Integer.parseInt(params[0]));
+        } catch (NumberFormatException e) {
+            throw new Exception("Invalid game ID: please enter a valid number");
+        }
         drawBoard();
         return "here is the board";
     }
@@ -100,6 +113,9 @@ public class LoginClient implements Client {
     }
     public String join(String ... params) throws Exception {
         assertSignedIn();
+        if(params.length != 2){
+            throw new Exception("invalid input, try again.");
+        }
         int gameID;
         try {
             if(listGameMap.isEmpty()){
@@ -136,6 +152,9 @@ public class LoginClient implements Client {
 
     public String login(String... params) throws Exception {
         assertSignedOut();
+        if(params.length != 2){
+            throw new Exception("invalid input, try again.");
+        }
         LoginRequest request = new LoginRequest(params[0], params[1]);
         LoginResponse response = serverFacade.login(request);
         authToken = response.authToken();
@@ -146,6 +165,9 @@ public class LoginClient implements Client {
 
     public String register(String... params) throws Exception {
         assertSignedOut();
+        if(params.length != 3){
+            throw new Exception("invalid input, try again.");
+        }
         RegisterRequest request = new RegisterRequest(params[0], params[1], params[2]);
         RegisterResponse response = serverFacade.register(request);
         status = POSTLOGIN;
@@ -156,6 +178,9 @@ public class LoginClient implements Client {
 
     public String create(String... params) throws Exception {
         assertSignedIn();
+        if(params.length != 1){
+            throw new Exception("invalid input, try again.");
+        }
         CreateGameResponse response = serverFacade.create(new CreateGameRequest(authToken, params[0]));
         return "You created game: " + params[0] +" type 'list' to see all games";
     }

@@ -1,7 +1,6 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.ResponseException;
 import service.responses.*;
 
 import java.io.InputStream;
@@ -14,27 +13,21 @@ import java.net.URL;
 public class ServerFacade {
     private final String serverUrl;
     public ServerFacade(String url) {
-    serverUrl = url;
+        serverUrl = url;
     }
 
     public ServerFacade(int port) {
-    serverUrl = "http://localhost:"+port;
+        serverUrl = "http://localhost:"+port;
     }
     public <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, String header) throws Exception{
-        try {
-            URL url = (new URI(serverUrl + path)).toURL();
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            http.setRequestMethod(method);
-            http.setDoOutput(true);
-            writeBody(request, http,header);
-            http.connect();
-            throwIfNotSuccessful(http);
-            return readBody(http, responseClass);
-        } catch (ResponseException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new ResponseException(500, ex.getMessage());
-        }
+        URL url = (new URI(serverUrl + path)).toURL();
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
+        http.setRequestMethod(method);
+        http.setDoOutput(true);
+        writeBody(request, http,header);
+        http.connect();
+        throwIfNotSuccessful(http);
+        return readBody(http, responseClass);
     }
 
     public RegisterResponse register(RegisterRequest request) throws Exception {
@@ -101,4 +94,4 @@ public class ServerFacade {
         var path = "/game";
         this.makeRequest("PUT",path,request,null, authToken);
     }
-    }
+}

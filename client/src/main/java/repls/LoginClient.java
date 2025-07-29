@@ -76,13 +76,13 @@ public class LoginClient implements Client {
         if(params.length != 1){
             throw new Exception("invalid input, try again.");
         }
-        int gameID;
         try {
+            int gameID = Integer.parseInt(params[0]);
             if(listGameMap.isEmpty()){
                 throw new Exception("Please list games before trying to join");
             }
             gameID = listGameMap.get(Integer.parseInt(params[0]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             throw new Exception("Invalid game ID: please enter a valid number");
         }
         drawBoard();
@@ -122,7 +122,7 @@ public class LoginClient implements Client {
                 throw new Exception("Please list games before trying to join");
             }
             gameID = listGameMap.get(Integer.parseInt(params[0]));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             throw new Exception("Invalid game ID: please enter a valid number");
         }
                 if (Objects.equals(params[1], "black")) {

@@ -27,7 +27,7 @@ public class BoardDrawer {
         var out = new PrintStream(System.out,true,StandardCharsets.UTF_8);
         String[] headers = { "h","g","f","e","d","c","b","a"};
         drawHeaders(out,headers);
-        String[] numbers = {"8","7","6","5","4","3","2","1"};
+        String[] numbers = {"1","2","3","4","5","6","7","8"};
         drawChessBoard(out,numbers,1);
         drawHeaders(out,headers);
 
@@ -82,7 +82,7 @@ public class BoardDrawer {
 
     private static void drawRowOfSquares(PrintStream out,int indexRow, int mod) {
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
-                if((boardCol+indexRow) %2 ==mod){
+                if((boardCol+indexRow) %2 ==0){
                     out.print(SET_BG_COLOR_WHITE);
                     printPiece(out,indexRow,boardCol,mod);
                 }
@@ -104,14 +104,14 @@ public class BoardDrawer {
             {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK}, // White major pieces
     };
     private static final String[][] INITIAL_PIECES_BLACK = {
-            {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK}, // Black major pieces
+            {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_KING,WHITE_QUEEN,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK}, // Black major pieces
             {WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN}, // Black pawns
             {null,null,null,null,null,null,null,null},
             {null,null,null,null,null,null,null,null},
             {null,null,null,null,null,null,null,null},
             {null,null,null,null,null,null,null,null},
             {BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN}, // White pawns
-            {BLACK_ROOK,BLACK_KNIGHT,BLACK_BISHOP,BLACK_QUEEN,BLACK_KING,BLACK_BISHOP,BLACK_KNIGHT,BLACK_ROOK}, // White major pieces
+            {BLACK_ROOK,BLACK_KNIGHT,BLACK_BISHOP,BLACK_KING,BLACK_QUEEN,BLACK_BISHOP,BLACK_KNIGHT,BLACK_ROOK}, // White major pieces
     };
     private static void printPiece(PrintStream out, int row, int col,int mod){
         String piece;

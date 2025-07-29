@@ -1,5 +1,6 @@
 package ui;
 
+import javax.sound.sampled.Line;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
@@ -7,7 +8,7 @@ import static ui.EscapeSequences.*;
 
 public class BoardDrawer {
     private static final int BOARD_SIZE_IN_SQUARES = 8;
-    private static final int SQUARE_SIZE_IN_PADDED_CHARS = 1;
+    private static final int SQUARE_SIZE_IN_PADDED_CHARS = 3;
     private static final int LINE_WIDTH_IN_PADDED_CHARS = 1;
     public void drawStandardBoardWhite(){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -27,24 +28,20 @@ public class BoardDrawer {
     private static void drawHeaders(PrintStream out) {
 
         setGrey(out);
-
+        out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS));
         String[] headers = { "a", "b", "c","d","e","f","g","h"};
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);
-            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-                out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS));
-            }
         }
 
         out.println();
     }
 
     private static void drawHeader(PrintStream out, String headerText) {
-        int prefixLength = 1;
-        int suffixLength = 1;
-        out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS/2));
+        int padding = (SQUARE_SIZE_IN_PADDED_CHARS)/2 -1;
+        out.print(EMPTY);
         printHeaderText(out, headerText);
-        out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS/4));
+        out.print(EMPTY);
     }
 
     private static void printHeaderText(PrintStream out, String player) {
@@ -62,15 +59,15 @@ public class BoardDrawer {
             String[] numbers = {"8","7","6","5","4","3","2","1"};
             out.print(SET_BG_COLOR_LIGHT_GREY);
             out.print(SET_TEXT_COLOR_DARK_GREY);
-            out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS/2));
+            out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS/2));
             out.print(numbers[boardRow]);
-            out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS/4));
+            out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS/2));
             drawRowOfSquares(out,boardRow);
             out.print(SET_BG_COLOR_LIGHT_GREY);
             out.print(SET_TEXT_COLOR_DARK_GREY);
-            out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS/2));
+            out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS/2));
             out.print(numbers[boardRow]);
-            out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS/4));
+            out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS/2));
             out.println();
         }
     }
@@ -79,11 +76,11 @@ public class BoardDrawer {
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
                 if((boardCol+indexRow) %2 ==0){
                     setWhite(out);
-                    out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS));
+                    out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS));
                 }
                 else {
                     setBlack(out);
-                    out.print(EMPTY.repeat(LINE_WIDTH_IN_PADDED_CHARS));
+                    out.print(EMPTY.repeat(SQUARE_SIZE_IN_PADDED_CHARS));
                 }
             }
             setWhite(out);

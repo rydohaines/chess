@@ -69,12 +69,19 @@ public class LoginClient implements Client {
                 case "quit" -> "quit";
                 case"join"-> join(params);
                 case"list" -> list(params);
+                case "observe" -> observe(params);
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
     }
+
+    private String observe(String[] params) {
+        drawBoard();
+        return "here is the board";
+    }
+
     public String list(String ... params) throws Exception {
         assertSignedIn();
         StringBuilder output = new StringBuilder();

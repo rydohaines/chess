@@ -1,12 +1,12 @@
 package repls;
 
+import dataaccess.ResponseException;
 import server.ServerFacade;
 import service.responses.*;
 
 import java.util.Arrays;
 
-import static repls.ClientStatus.POSTLOGIN;
-import static repls.ClientStatus.PRELOGIN;
+import static repls.ClientStatus.*;
 
 public class LoginClient implements Client {
     private final ServerFacade serverFacade;
@@ -62,6 +62,7 @@ public class LoginClient implements Client {
         }
     }
     public String logout() throws Exception {
+        assertSignedIn();
         LogoutRequest request = new LogoutRequest(authToken);
         serverFacade.logout(request);
         status = PRELOGIN;
@@ -69,6 +70,7 @@ public class LoginClient implements Client {
     }
 
     public String login(String... params) throws Exception {
+        assertSignedOut();
         LoginRequest request = new LoginRequest(params[0], params[1]);
         LoginResponse response = serverFacade.login(request);
         authToken = response.authToken();
@@ -78,17 +80,32 @@ public class LoginClient implements Client {
     }
 
     public String register(String... params) throws Exception {
+        assertSignedOut();
         RegisterRequest request = new RegisterRequest(params[0], params[1], params[2]);
         RegisterResponse response = serverFacade.register(request);
         status = POSTLOGIN;
         authToken = response.authToken();
-        System.out.println("Setting auth token to: " + response.authToken());
         return "You logged in as " + response.username();
     }
 
     public String create(String... params) throws Exception {
-        System.out.println("auth token is: " + authToken);
+        assertSignedIn();
         CreateGameResponse response = serverFacade.create(new CreateGameRequest(authToken, params[0]));
         return "You created game: " + params[0] + "with gameID " + response.gameID();
+    }
+    private void assertSignedIn() throws ResponseException {
+        if (status != POSTLOGIN) {
+            throw new ResponseException(400, "You must sign in");
+        }
+    }
+    private void assertSignedOut() throws ResponseException{
+        if(status != PRELOGIN){
+            throw new ResponseException(400, "Cannot preform action, you are already signed in");
+        }
+    }
+    private void asserInGame() throws ResponseException{
+        if(status != GAMESTATUS){
+            throw new ResponseException(400, "invalid command you are in a game.");
+        }
     }
 }

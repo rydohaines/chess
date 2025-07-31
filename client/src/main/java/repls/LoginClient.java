@@ -1,7 +1,9 @@
 package repls;
 
 import responses.*;
+import server.NotificationHandler;
 import server.ServerFacade;
+import server.WebSocketFacade;
 import ui.BoardDrawer;
 
 
@@ -11,15 +13,17 @@ import static repls.ClientStatus.*;
 
 public class LoginClient implements Client {
     private final ServerFacade serverFacade;
-    private final Repl repl;
+    private final NotificationHandler notificationHandler;
     private ClientStatus status = PRELOGIN;
     private String authToken = null;
     private String currentUser = null;
     private final Map<Integer,Integer> listGameMap = new HashMap<>();
+    private WebSocketFacade ws;
+    String serverUrl;
 
-    public LoginClient(String serverUrl, Repl repl) {
+    public LoginClient(String serverUrl, NotificationHandler notificationHandler) {
         serverFacade = new ServerFacade(serverUrl);
-        this.repl = repl;
+        this.notificationHandler = notificationHandler;
     }
 
     public String help() {
@@ -86,7 +90,10 @@ public class LoginClient implements Client {
             throw new Exception("Invalid game ID: please enter a valid number");
         }
         drawBoard();
+        ws = new WebSocketFacade(serverUrl,notificationHandler);
+        ws.connect();
         return "here is the board";
+
     }
 
     public String list(String ... params) throws Exception {
@@ -137,6 +144,7 @@ public class LoginClient implements Client {
             else{
                 throw new Exception("please enter 'WHITE' or 'BLACK'");
             }
+
         return "Joined game as " + params[1];
     }
     public String logout() throws Exception {

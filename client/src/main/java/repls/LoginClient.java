@@ -5,6 +5,7 @@ import server.NotificationHandler;
 import server.ServerFacade;
 import server.WebSocketFacade;
 import ui.BoardDrawer;
+import websocket.commands.UserGameCommand;
 
 
 import java.util.*;
@@ -77,11 +78,12 @@ public class LoginClient implements Client {
 
     private String observe(String[] params) throws Exception {
         assertSignedIn();
+        int gameID;
         if(params.length != 1){
             throw new Exception("invalid input, try again.");
         }
         try {
-            int gameID = Integer.parseInt(params[0]);
+            gameID = Integer.parseInt(params[0]);
             if(listGameMap.isEmpty()){
                 throw new Exception("Please list games before trying to join");
             }
@@ -91,7 +93,7 @@ public class LoginClient implements Client {
         }
         drawBoard();
         ws = new WebSocketFacade(serverUrl,notificationHandler);
-        ws.connect();
+        ws.connect(authToken,gameID);
         return "here is the board";
 
     }

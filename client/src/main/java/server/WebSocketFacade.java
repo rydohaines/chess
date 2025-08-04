@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -34,7 +35,13 @@ public class WebSocketFacade extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
-    public void connect(){
-
+    public void connect(String authToken,int gameID) throws Exception{
+        try{
+         var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT,authToken,gameID);
+        this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch(Exception ex){
+            throw new Exception("Unable to connect");
+        }
     }
+
 }

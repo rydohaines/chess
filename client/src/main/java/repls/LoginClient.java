@@ -87,7 +87,7 @@ public class LoginClient implements Client {
         }
     }
     public void updateBoard(GameData game){
-        if(Objects.equals(currentUser, game.whiteUsername())){
+        if(Objects.equals(currentUser, game.blackUsername())){
             drawBlackBoard(game.game().getBoard());
         }
         else{
@@ -115,7 +115,6 @@ public class LoginClient implements Client {
         } catch (Exception e) {
             throw new Exception("Invalid game ID: please enter a valid number");
         }
-        drawBoard();
         ws.connect(authToken,gameID);
         currGameID = gameID;
         status = GAMESTATUS;
@@ -162,7 +161,6 @@ public class LoginClient implements Client {
                 if (Objects.equals(params[1], "black")) {
                 JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
                 serverFacade.join(request,authToken);
-                this.drawBlackBoard();
                 } else if (Objects.equals(params[1], "white")) {
                 JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
                 serverFacade.join(request,authToken);

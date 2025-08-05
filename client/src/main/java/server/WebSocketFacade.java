@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import repls.Repl;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
@@ -8,9 +9,9 @@ import javax.websocket.*;
 import java.net.URI;
 
 public class WebSocketFacade extends Endpoint {
-    NotificationHandler notificationHandler;
+    Repl notificationHandler;
     Session session;
-    public WebSocketFacade(String url, NotificationHandler notificationHandler) throws Exception {
+    public WebSocketFacade(String url, Repl notificationHandler) throws Exception {
         try {
             url = url.replace("http", "ws");
             URI socketURI = new URI(url + "/ws");
@@ -37,8 +38,8 @@ public class WebSocketFacade extends Endpoint {
     }
     public void connect(String authToken,int gameID) throws Exception{
         try{
-         var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT,authToken,gameID);
-        this.session.getBasicRemote().sendText(new Gson().toJson(command));
+            var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT,authToken,gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
         } catch(Exception ex){
             throw new Exception("Unable to connect");
         }

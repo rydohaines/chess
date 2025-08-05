@@ -14,7 +14,7 @@ import static repls.ClientStatus.*;
 
 public class LoginClient implements Client {
     private final ServerFacade serverFacade;
-    private final NotificationHandler notificationHandler;
+    private final Repl notificationHandler;
     private ClientStatus status = PRELOGIN;
     private String authToken = null;
     private String currentUser = null;
@@ -22,8 +22,10 @@ public class LoginClient implements Client {
     private WebSocketFacade ws;
     String serverUrl;
 
-    public LoginClient(String serverUrl, NotificationHandler notificationHandler) {
+    public LoginClient(String serverUrl, Repl notificationHandler) throws Exception {
         serverFacade = new ServerFacade(serverUrl);
+        this.serverUrl = serverUrl;
+        ws = new WebSocketFacade(serverUrl,notificationHandler);
         this.notificationHandler = notificationHandler;
     }
 
@@ -92,7 +94,6 @@ public class LoginClient implements Client {
             throw new Exception("Invalid game ID: please enter a valid number");
         }
         drawBoard();
-        ws = new WebSocketFacade(serverUrl,notificationHandler);
         ws.connect(authToken,gameID);
         return "here is the board";
 

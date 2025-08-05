@@ -6,12 +6,12 @@ import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
 
-import static java.awt.Color.RED;
+
 import static ui.EscapeSequences.*;
 
 public class Repl implements NotificationHandler {
     private final Client client;
-    public Repl(String serverUrl) {
+    public Repl(String serverUrl) throws Exception {
         client = new LoginClient (serverUrl,this);
     }
     public void run(){
@@ -40,5 +40,6 @@ public class Repl implements NotificationHandler {
 
     @Override
     public void notify(ServerMessage notification) {
+        System.out.print(SET_TEXT_COLOR_RED + notification.getMessage());
     }
 }

@@ -5,6 +5,7 @@ import dataaccess.AuthDAO;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import service.GameService;
@@ -19,10 +20,13 @@ public class WebSocketHandler{
     private final ConnectionManager connections = new ConnectionManager();
     private final UserService userService;
     private final GameService gameService;
-    public WebSocketHandler(UserService userService, GameService gameService){
+
+    public WebSocketHandler(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
     }
+
+
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
         UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);

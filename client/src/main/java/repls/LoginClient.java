@@ -22,6 +22,7 @@ public class LoginClient implements Client {
     private String authToken = null;
     private String currentUser = null;
     private int currGameID;
+    private GameData currGameData;
     private final Map<Integer,Integer> listGameMap = new HashMap<>();
     private WebSocketFacade ws;
     String serverUrl;
@@ -80,11 +81,16 @@ public class LoginClient implements Client {
                 case"list" -> list(params);
                 case "observe" -> observe(params);
                 case "leave" -> leave();
+                case "redraw" -> redraw();
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+    public String redraw(){
+        this.updateBoard(currGameData);
+        return "";
     }
     public void updateBoard(GameData game){
         if(Objects.equals(currentUser, game.blackUsername())){
@@ -93,6 +99,7 @@ public class LoginClient implements Client {
         else{
             drawBoard(game.game().getBoard());
         }
+        currGameData = game;
     }
     private String leave() throws Exception {
         assertGameState();

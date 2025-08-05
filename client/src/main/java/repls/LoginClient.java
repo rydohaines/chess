@@ -18,6 +18,7 @@ public class LoginClient implements Client {
     private ClientStatus status = PRELOGIN;
     private String authToken = null;
     private String currentUser = null;
+    private int currGameID;
     private final Map<Integer,Integer> listGameMap = new HashMap<>();
     private WebSocketFacade ws;
     String serverUrl;
@@ -71,13 +72,19 @@ public class LoginClient implements Client {
                 case"join"-> join(params);
                 case"list" -> list(params);
                 case "observe" -> observe(params);
+                case "leave" -> leave();
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
     }
-
+    private String leave() throws Exception {
+        assertGameState();
+        ws.leave(authToken,currGameID);
+        status = POSTLOGIN;
+        return "You have left the game";
+    }
     private String observe(String[] params) throws Exception {
         assertSignedIn();
         int gameID;
@@ -95,6 +102,8 @@ public class LoginClient implements Client {
         }
         drawBoard();
         ws.connect(authToken,gameID);
+        currGameID = gameID;
+        status = GAMESTATUS;
         return "here is the board";
 
     }
@@ -148,6 +157,8 @@ public class LoginClient implements Client {
                 throw new Exception("please enter 'WHITE' or 'BLACK'");
             }
         ws.connect(authToken,gameID);
+            currGameID = gameID;
+            status = GAMESTATUS;
         return "Joined game as " + params[1];
     }
     public String logout() throws Exception {
@@ -205,6 +216,11 @@ public class LoginClient implements Client {
     private void assertSignedOut() throws Exception{
         if(status != PRELOGIN){
             throw new Exception("Cannot preform action, you are already signed in");
+        }
+    }
+    private void assertGameState() throws Exception{
+        if(status != GAMESTATUS){
+            throw new Exception("You are not in a game");
         }
     }
     private void drawBoard(){

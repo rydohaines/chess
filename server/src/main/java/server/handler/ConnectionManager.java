@@ -15,6 +15,9 @@ public class ConnectionManager {
         var connection = new Connection(visitorName, session);
         connections.put(visitorName, connection);
     }
+    public void remove(String username, Session session){
+        connections.remove(username);
+    }
     public void broadcast(String excludeVisitorName, ServerMessage serverMessage) throws Exception {
         var removeList = new ArrayList<Connection>();
         for (var c : connections.values()) {

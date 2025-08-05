@@ -34,7 +34,16 @@ public class WebSocketHandler{
         UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
         switch (command.getCommandType()) {
             case CONNECT -> connect(command.getAuthToken(), command.getGameID(), session);
+            case LEAVE -> leave(command.getAuthToken(),command.getGameID(),session);
         }
+    }
+    public void leave(String authToken, int gameID, Session session) throws Exception{
+        String user = userService.getAuthDataAccess().getUser(authToken);
+        connections.remove(user,session);
+        var message = String.format("%s has left the game",user);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        notification.setMessage(message);
+        connections.broadcast(user,notification);
     }
     public void connect(String authToken, int gameID, Session session) throws Exception{
         String user = userService.getAuthDataAccess().getUser(authToken);

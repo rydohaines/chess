@@ -4,6 +4,7 @@ import chess.ChessGame;
 import model.GameData;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -31,6 +32,12 @@ public class MemoryGameDAO implements GameDAO{
         }
         return null;
     }
+
+    @Override
+    public void removeUser(int gameID, String username, ChessGame.TeamColor playerColor) throws ResponseException, DataAccessException, SQLException {
+
+    }
+
     public void updateGame(int gameID, ChessGame.TeamColor playerColor, String username) throws DataAccessException {
         GameData game = getGame(gameID);
         GameData newGame = null;

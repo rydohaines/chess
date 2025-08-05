@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class MySQLGameDAO extends MySQLdata implements GameDAO{
 
@@ -91,6 +90,21 @@ public class MySQLGameDAO extends MySQLdata implements GameDAO{
             throw new ResponseException(500, String.format("Unable to read data: %s", e.getMessage()));
         }
         return null;
+    }
+    @Override
+    public void removeUser(int gameID, String username, ChessGame.TeamColor playerColor) throws ResponseException, DataAccessException, SQLException {
+        var conn = DatabaseManager.getConnection();
+        var gameData = this.getGame(gameID);
+        if(playerColor == ChessGame.TeamColor.WHITE){
+            var prepareStatment = conn.prepareStatement("UPDATE game SET whiteUsername = NULL where gameID=?");
+            prepareStatment.setInt(1,gameID);
+            prepareStatment.executeUpdate();
+        }
+        if(playerColor == ChessGame.TeamColor.BLACK){
+            var prepareStatment = conn.prepareStatement("UPDATE game SET blackUsername = NULL where gameID=?");
+            prepareStatment.setInt(1,gameID);
+            prepareStatment.executeUpdate();
+        }
     }
 
     @Override

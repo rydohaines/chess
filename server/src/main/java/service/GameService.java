@@ -13,12 +13,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+import static chess.ChessGame.TeamColor.BLACK;
+import static chess.ChessGame.TeamColor.WHITE;
+
 public class GameService {
     private final GameDAO gameDataAccess;
     private final AuthDAO authDataAccess;
     public GameService(GameDAO gameDataAccess, AuthDAO authDataAccess){
         this.gameDataAccess = gameDataAccess;
         this.authDataAccess = authDataAccess;
+    }
+    public void removeUser(String username, int gameID) throws Exception {
+        var gameData = gameDataAccess.getGame(gameID);
+        if(Objects.equals(username, gameData.blackUsername())){
+            gameDataAccess.removeUser(gameID,username,BLACK);
+        }
+        else if(Objects.equals(username, gameData.whiteUsername())){
+            gameDataAccess.removeUser(gameID, username,WHITE);
+        }
     }
     public GameData getGame(int gameID) throws Exception {
         return gameDataAccess.getGame(gameID);
@@ -47,9 +59,9 @@ public class GameService {
         }
         String requestColor = req.playerColor().toLowerCase();
         if(Objects.equals(requestColor, "black")){
-            playerColor = ChessGame.TeamColor.BLACK;
+            playerColor = BLACK;
         }else if(Objects.equals(requestColor, "white")){
-            playerColor = ChessGame.TeamColor.WHITE;
+            playerColor = WHITE;
         }
         else {
             throw new DataAccessException("Bad Request");

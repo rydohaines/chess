@@ -39,6 +39,7 @@ public class WebSocketHandler{
     }
     public void leave(String authToken, int gameID, Session session) throws Exception{
         String user = userService.getAuthDataAccess().getUser(authToken);
+        gameService.removeUser(user,gameID);
         connections.remove(user,session);
         var message = String.format("%s has left the game",user);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);

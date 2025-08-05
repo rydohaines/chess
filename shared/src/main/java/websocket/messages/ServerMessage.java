@@ -1,5 +1,7 @@
 package websocket.messages;
 
+import chess.ChessGame;
+
 import java.util.Objects;
 
 /**
@@ -11,6 +13,7 @@ import java.util.Objects;
 public class ServerMessage {
     ServerMessageType serverMessageType;
     private String message = null;
+    private ChessGame game;
 
     public enum ServerMessageType {
         LOAD_GAME,
@@ -23,6 +26,9 @@ public class ServerMessage {
     }
     public void setMessage(String message){
         this.message = message;
+    }
+    public void updateGame(ChessGame game){
+        this.game = game;
     }
     public String getMessage(){
         return message;

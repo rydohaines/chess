@@ -1,7 +1,10 @@
 package server.handler;
 
+import chess.ChessGame;
+import chess.ChessMove;
 import com.google.gson.Gson;
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import model.GameData;
@@ -15,6 +18,7 @@ import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 import javax.management.Notification;
+import java.sql.SQLException;
 import java.util.Objects;
 
 @WebSocket
@@ -35,7 +39,22 @@ public class WebSocketHandler{
         switch (command.getCommandType()) {
             case CONNECT -> connect(command.getAuthToken(), command.getGameID(), session);
             case LEAVE -> leave(command.getAuthToken(),command.getGameID(),session);
+            case MAKE_MOVE -> makeMove(command.getAuthToken(),command.getGameID(),command.getMove(),session);
         }
+    }
+    public void makeMove(String authToken, int gameID, ChessMove move, Session session) throws Exception {
+        String user = userService.getAuthDataAccess().getUser(authToken);
+        ChessGame chessGame = gameService.getGame(gameID).game();
+        chessGame.makeMove(move);
+        gameService.updateBoard(gameID,chessGame);
+        GameData gameData = gameService.getGame(gameID);
+        var gameNotification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
+        gameNotification.updateGame(gameData);
+        connections.notify(user,gameNotification);
+        connections.broadcast(user,gameNotification);
+        var moveMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        moveMessage.setMessage(move.toString());
+        connections.broadcast(user,moveMessage);
     }
     public void leave(String authToken, int gameID, Session session) throws Exception{
         String user = userService.getAuthDataAccess().getUser(authToken);

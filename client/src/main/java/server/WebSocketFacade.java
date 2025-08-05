@@ -1,11 +1,13 @@
 package server;
 
+import chess.ChessMove;
 import com.google.gson.Gson;
 import repls.Repl;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
+import java.io.IOException;
 import java.net.URI;
 
 public class WebSocketFacade extends Endpoint {
@@ -44,6 +46,15 @@ public class WebSocketFacade extends Endpoint {
             throw new Exception("Unable to connect");
         }
 
+    }
+    public void makeMove(String authToken, int gameID, ChessMove move) throws Exception {
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID);
+            command.setMove(move);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        }catch(Exception ex){
+            throw new Exception("Unable to connect");
+        }
     }
     public void connect(String authToken,int gameID) throws Exception{
         try{

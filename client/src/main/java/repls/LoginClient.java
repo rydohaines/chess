@@ -1,7 +1,6 @@
 package repls;
 
-import chess.ChessBoard;
-import chess.ChessGame;
+import chess.*;
 import model.GameData;
 import responses.*;
 import server.NotificationHandler;
@@ -13,6 +12,7 @@ import websocket.commands.UserGameCommand;
 
 import java.util.*;
 
+import static chess.ChessPiece.PieceType.*;
 import static repls.ClientStatus.*;
 
 public class LoginClient implements Client {
@@ -58,8 +58,8 @@ public class LoginClient implements Client {
             return """
                     leave - the game
                     redraw - the chess board
-                    move <ROW> <COL> - make a chess move
-                    highlight <ROW> <COL> - highlight possible moves
+                    move <ROW,COL> <ROW,COL> <PROMOTION_PIECE>- make a chess move, and promotion if applicable. Type no if no promotion piece.
+                    highlight <ROW> <COL> - highlight possible moves 
                     resign - forfeit the game
                     help - see possible commands
                     """;
@@ -82,11 +82,65 @@ public class LoginClient implements Client {
                 case "observe" -> observe(params);
                 case "leave" -> leave();
                 case "redraw" -> redraw();
+                case "move" ->move(params);
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+    private String move(String... params) throws Exception {
+        assertGameState();
+
+        if (params.length < 2 || params.length > 3) {
+            throw new Exception("Usage: move <from> <to> [promotionPiece]");
+        }
+
+        try {
+            char startCol = params[0].charAt(0);
+            int startRow = Character.getNumericValue(params[0].charAt(1));
+            char endCol = params[1].charAt(0);
+            int endRow = Character.getNumericValue(params[1].charAt(1));
+
+            var startPos = new ChessPosition(startRow, toInt(startCol));
+            var endPos = new ChessPosition(endRow, toInt(endCol));
+
+            ChessPiece.PieceType promotion = null;
+            if (params.length == 3) {
+                promotion = toPiece(params[2]);
+            }
+
+            var move = new ChessMove(startPos, endPos, promotion);
+            ws.makeMove(authToken, currGameID, move);
+
+            return "Move sent successfully.";
+        } catch (Exception ex) {
+            throw new Exception("Move error: " + ex.getMessage());
+        }
+    }
+    private ChessPiece.PieceType toPiece(String pieceName) throws Exception {
+        return switch(pieceName){
+          case "queen"->QUEEN;
+          case"rook"-> ROOK;
+          case "knight"->KNIGHT;
+          case"bishop"->BISHOP;
+          case "no" ->null;
+            default -> throw new Exception("Invalid input");
+        };
+    }
+    private int toInt(char col) throws Exception {
+        return switch (col){
+            case 'a'-> 1;
+            case 'b' -> 2;
+            case 'c' -> 3;
+            case 'd'->4;
+            case'e'->5;
+            case'f'->6;
+            case 'g'->7;
+            case 'h' ->8;
+
+            default -> throw new Exception("invalid input");
+        };
     }
     public String redraw(){
         this.updateBoard(currGameData);

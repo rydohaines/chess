@@ -44,6 +44,11 @@ public class ChessMove {
     }
 
     @Override
+    public String toString() {
+        String chessMove = ""
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
             return false;

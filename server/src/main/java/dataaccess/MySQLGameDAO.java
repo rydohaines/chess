@@ -92,6 +92,15 @@ public class MySQLGameDAO extends MySQLdata implements GameDAO{
         return null;
     }
     @Override
+    public void updateBoard(int gameID, ChessGame game) throws Exception {
+        var conn = DatabaseManager.getConnection();
+        var json = new Gson().toJson(game);
+        var ps = conn.prepareStatement("UPDATE game SET jsonGame = ? where gameID = ?");
+        ps.setString(1,json);
+        ps.setInt(2,gameID);
+        ps.executeUpdate();
+    }
+    @Override
     public void removeUser(int gameID, String username, ChessGame.TeamColor playerColor) throws ResponseException, DataAccessException, SQLException {
         var conn = DatabaseManager.getConnection();
         var gameData = this.getGame(gameID);

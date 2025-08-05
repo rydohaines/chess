@@ -32,6 +32,9 @@ public class GameService {
             gameDataAccess.removeUser(gameID, username,WHITE);
         }
     }
+    public void updateBoard(int gameID, ChessGame game) throws Exception {
+        gameDataAccess.updateBoard(gameID,game);
+    }
     public GameData getGame(int gameID) throws Exception {
         return gameDataAccess.getGame(gameID);
     }

@@ -20,6 +20,9 @@ public class GameService {
         this.gameDataAccess = gameDataAccess;
         this.authDataAccess = authDataAccess;
     }
+    public GameData getGame(int gameID) throws Exception {
+        return gameDataAccess.getGame(gameID);
+    }
     public CreateGameResponse createGame(CreateGameRequest req) throws DataAccessException, SQLException {
         if(req.gameName()== null){
             throw new DataAccessException("Bad Request");

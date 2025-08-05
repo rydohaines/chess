@@ -147,7 +147,7 @@ public class LoginClient implements Client {
             else{
                 throw new Exception("please enter 'WHITE' or 'BLACK'");
             }
-
+        ws.connect(authToken,gameID);
         return "Joined game as " + params[1];
     }
     public String logout() throws Exception {

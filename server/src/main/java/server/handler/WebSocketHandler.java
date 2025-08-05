@@ -59,6 +59,9 @@ public class WebSocketHandler{
         var message = String.format("%s has entered the game as %s" , user,color);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
         notification.setMessage(message);
+        var gameNotification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
+        gameNotification.updateGame(game);
+        connections.notify(user,gameNotification);
         connections.broadcast(user,notification);
 
     }

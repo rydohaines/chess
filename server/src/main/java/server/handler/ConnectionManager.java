@@ -6,6 +6,7 @@ import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
@@ -14,6 +15,15 @@ public class ConnectionManager {
     public void add(String visitorName, Session session) {
         var connection = new Connection(visitorName, session);
         connections.put(visitorName, connection);
+    }
+    public void notify(String username, ServerMessage message) throws Exception {
+        for(var c : connections.values()){
+            if(c.session.isOpen()) {
+                if (Objects.equals(c.visitorName, username)) {
+                    c.send(new Gson().toJson(message));
+                }
+            }
+        }
     }
     public void remove(String username, Session session){
         connections.remove(username);

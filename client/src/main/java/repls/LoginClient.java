@@ -1,5 +1,8 @@
 package repls;
 
+import chess.ChessBoard;
+import chess.ChessGame;
+import model.GameData;
 import responses.*;
 import server.NotificationHandler;
 import server.ServerFacade;
@@ -52,7 +55,11 @@ public class LoginClient implements Client {
         }
         else{
             return """
-                    quit - playing chess
+                    leave - the game
+                    redraw - the chess board
+                    move <ROW> <COL> - make a chess move
+                    highlight <ROW> <COL> - highlight possible moves
+                    resign - forfeit the game
                     help - see possible commands
                     """;
         }
@@ -77,6 +84,14 @@ public class LoginClient implements Client {
             };
         } catch (Exception ex) {
             return ex.getMessage();
+        }
+    }
+    public void updateBoard(GameData game){
+        if(Objects.equals(currentUser, game.whiteUsername())){
+            drawBlackBoard(game.game().getBoard());
+        }
+        else{
+            drawBoard(game.game().getBoard());
         }
     }
     private String leave() throws Exception {
@@ -151,12 +166,11 @@ public class LoginClient implements Client {
                 } else if (Objects.equals(params[1], "white")) {
                 JoinGameRequest request = new JoinGameRequest(params[1],gameID, currentUser);
                 serverFacade.join(request,authToken);
-                    this.drawBoard();
             }
             else{
                 throw new Exception("please enter 'WHITE' or 'BLACK'");
             }
-        ws.connect(authToken,gameID);
+            ws.connect(authToken,gameID);
             currGameID = gameID;
             status = GAMESTATUS;
         return "Joined game as " + params[1];
@@ -223,12 +237,12 @@ public class LoginClient implements Client {
             throw new Exception("You are not in a game");
         }
     }
-    private void drawBoard(){
+    private void drawBoard(ChessBoard board){
         BoardDrawer drawer = new BoardDrawer();
-        drawer.drawStandardBoardWhite();
+        drawer.drawStandardBoardWhite(board);
     }
-    private void drawBlackBoard(){
+    private void drawBlackBoard(ChessBoard board){
         BoardDrawer drawer = new BoardDrawer();
-        drawer.drawBoardBlack();
+        drawer.drawBoardBlack(board);
     }
 }

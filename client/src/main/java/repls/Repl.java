@@ -2,6 +2,7 @@ package repls;
 
 
 import server.NotificationHandler;
+import ui.BoardDrawer;
 import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
@@ -11,6 +12,7 @@ import static ui.EscapeSequences.*;
 
 public class Repl implements NotificationHandler {
     private final Client client;
+    private final BoardDrawer drawer = new BoardDrawer();
     public Repl(String serverUrl) throws Exception {
         client = new LoginClient (serverUrl,this);
     }
@@ -40,6 +42,11 @@ public class Repl implements NotificationHandler {
 
     @Override
     public void notify(ServerMessage notification) {
-        System.out.println(SET_TEXT_COLOR_RED + notification.getMessage());
+        if (notification.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
+            System.out.println(SET_TEXT_COLOR_RED + notification.getMessage());
+        }
+        else if(notification.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME){
+           client.updateBoard(notification.getGame());
+        }
     }
 }

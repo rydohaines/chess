@@ -1,6 +1,8 @@
 package ui;
 
 
+import chess.ChessBoard;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
@@ -10,7 +12,7 @@ public class BoardDrawer {
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final int SQUARE_SIZE_IN_PADDED_CHARS = 3;
     private static final int LINE_WIDTH_IN_PADDED_CHARS = 1;
-    public void drawStandardBoardWhite(){
+    public void drawStandardBoardWhite(ChessBoard board){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
@@ -23,7 +25,7 @@ public class BoardDrawer {
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
     }
-    public void drawBoardBlack(){
+    public void drawBoardBlack(ChessBoard board){
         var out = new PrintStream(System.out,true,StandardCharsets.UTF_8);
         String[] headers = { "h","g","f","e","d","c","b","a"};
         drawHeaders(out,headers);

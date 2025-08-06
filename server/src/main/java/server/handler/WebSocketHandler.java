@@ -10,6 +10,7 @@ import dataaccess.UserDAO;
 import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import service.GameService;
@@ -18,6 +19,7 @@ import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 import javax.management.Notification;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -46,9 +48,24 @@ public class WebSocketHandler{
         }
     }
     public void makeMove(String authToken, int gameID, ChessMove move, Session session) throws Exception {
-        String user = userService.getAuthDataAccess().getUser(authToken);
-        ChessGame.TeamColor teamColor = gameService.getTeamColor(user,gameID);
-        ChessGame.TeamColor opponentColor;
+        String user;
+        try {
+             user = userService.getAuthDataAccess().getUser(authToken);
+        }catch (Exception ex){
+            var errorMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            errorMessage.setErrorMessage("Unauthorized");
+            throw new Exception(ex.getMessage());
+        }
+        ChessGame.TeamColor teamColor;
+        try {
+            teamColor = gameService.getTeamColor(user, gameID);
+        }catch (Exception ex){
+            var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            error.setErrorMessage("Observers cannot make moves");
+            connections.notify(user,error);
+            return;
+        }
+            ChessGame.TeamColor opponentColor;
         if(teamColor == WHITE){
             opponentColor = BLACK;
         }
@@ -58,7 +75,7 @@ public class WebSocketHandler{
         ChessGame chessGame = gameService.getGame(gameID).game();
         if(gameService.getGame(gameID).game().getTeamTurn() != teamColor){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
-            error.setMessage("Not your turn move failed");
+            error.setErrorMessage("Not your turn move failed");
             connections.notify(user,error);
             return;
         }
@@ -66,7 +83,7 @@ public class WebSocketHandler{
             chessGame.makeMove(move);
         }catch (Exception ex){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
-            error.setMessage("Invalid Move");
+            error.setErrorMessage("Invalid Move");
             connections.notify(user,error);
             return;
         }
@@ -106,10 +123,28 @@ public class WebSocketHandler{
         notification.setMessage(message);
         connections.broadcast(user,notification);
     }
-    public void connect(String authToken, int gameID, Session session) throws Exception{
-        String user = userService.getAuthDataAccess().getUser(authToken);
+    public void connect(String authToken, int gameID, Session session) throws Exception {
+        String user = null;
+        try {
+            user = userService.getAuthDataAccess().getUser(authToken);
+        } catch (Exception ex){
+            var message = "Unauthorized";
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            notification.setErrorMessage(message);
+            session.getRemote().sendString(new Gson().toJson(notification));
+            return;
+        }
         connections.add(user,session);
-        GameData game = gameService.getGame(gameID);
+        GameData game;
+        try {
+            game = gameService.getGame(gameID);
+        } catch (Exception ex){
+            var message = "Invalid GameID";
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            notification.setErrorMessage(message);
+            session.getRemote().sendString(new Gson().toJson(notification));
+            return;
+        }
         String color = "observer";
         if(Objects.equals(game.blackUsername(), user)){
             color = "black";
@@ -124,5 +159,13 @@ public class WebSocketHandler{
         connections.notify(user,gameNotification);
         connections.broadcast(user,notification);
 
+    }
+    @OnWebSocketError
+    public void onError(Session session, Throwable error) throws IOException {
+        if(error.getMessage() != null) {
+            var errorMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            errorMessage.setErrorMessage(error.getMessage());
+            session.getRemote().sendString(new Gson().toJson(errorMessage));
+        }
     }
 }

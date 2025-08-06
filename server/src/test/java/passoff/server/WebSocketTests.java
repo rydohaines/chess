@@ -432,3 +432,4 @@ public class WebSocketTests {
 
     private record WebsocketUser(String username, String authToken) { }
 }
+

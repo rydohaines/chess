@@ -15,13 +15,19 @@ public class ServerMessage {
     ServerMessageType serverMessageType;
     private String message = null;
     private GameData game;
+    private String errorMessage;
 
     public enum ServerMessageType {
         LOAD_GAME,
         ERROR,
         NOTIFICATION
     }
-
+    public void setErrorMessage(String message){
+        this.errorMessage = message;
+    }
+    public String getErrorMessage(){
+        return errorMessage;
+    }
     public ServerMessage(ServerMessageType type) {
         this.serverMessageType = type;
     }

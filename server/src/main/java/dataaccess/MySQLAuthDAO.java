@@ -74,11 +74,10 @@ public class MySQLAuthDAO extends MySQLdata implements AuthDAO{
             try(var rs = ps.executeQuery()) {
                 if (rs.next()) {
                    return rs.getString(1);
-                }
+                }throw new DataAccessException("Invalid or expired auth token.");
             }catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-        return null;
     }
 }

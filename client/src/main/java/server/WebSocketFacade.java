@@ -53,7 +53,7 @@ public class WebSocketFacade extends Endpoint {
             command.setMove(move);
             this.session.getBasicRemote().sendText(new Gson().toJson(command));
         }catch(Exception ex){
-            throw new Exception("Unable to connect");
+            throw new Exception(ex.getMessage());
         }
     }
     public void connect(String authToken,int gameID) throws Exception{

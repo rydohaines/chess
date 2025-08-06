@@ -35,6 +35,18 @@ public class GameService {
     public void updateBoard(int gameID, ChessGame game) throws Exception {
         gameDataAccess.updateBoard(gameID,game);
     }
+    public ChessGame.TeamColor getTeamColor(String user, int gameID) throws Exception {
+        var gameData = gameDataAccess.getGame(gameID);
+        if(Objects.equals(gameData.whiteUsername(), user)){
+            return WHITE;
+        }
+        else if(Objects.equals(gameData.blackUsername(), user)){
+            return BLACK;
+        }
+        else{
+            throw new Exception("Unauthorized");
+        }
+    }
     public GameData getGame(int gameID) throws Exception {
         return gameDataAccess.getGame(gameID);
     }

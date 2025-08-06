@@ -44,7 +44,14 @@ public class WebSocketHandler{
     }
     public void makeMove(String authToken, int gameID, ChessMove move, Session session) throws Exception {
         String user = userService.getAuthDataAccess().getUser(authToken);
+        ChessGame.TeamColor teamColor = gameService.getTeamColor(user,gameID);
         ChessGame chessGame = gameService.getGame(gameID).game();
+        if(gameService.getGame(gameID).game().getTeamTurn() != teamColor){
+            var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            error.setMessage("Not your turn move failed");
+            connections.notify(user,error);
+            return;
+        }
         chessGame.makeMove(move);
         gameService.updateBoard(gameID,chessGame);
         GameData gameData = gameService.getGame(gameID);

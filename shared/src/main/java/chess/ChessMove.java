@@ -45,9 +45,21 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        String chessMove = ""
+        return String.format("from %s%x to %s%x",toCol(startingPos.getColumn()),startingPos.getRow(),toCol(endingPos.getColumn()),endingPos.getRow());
     }
-
+    private String toCol(int col) {
+        return switch (col) {
+            case 1 -> "a";
+            case 2 -> "b";
+            case 3 -> "c";
+            case 4 -> "d";
+            case 5 -> "e";
+            case 6 -> "f";
+            case 7 -> "g";
+            case 8 -> "h";
+            default -> throw new IllegalArgumentException("Invalid column number: " + col);
+        };
+    }
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

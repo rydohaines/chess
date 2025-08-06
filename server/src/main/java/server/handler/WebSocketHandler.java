@@ -62,7 +62,14 @@ public class WebSocketHandler{
             connections.notify(user,error);
             return;
         }
-        chessGame.makeMove(move);
+        try{
+            chessGame.makeMove(move);
+        }catch (Exception ex){
+            var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
+            error.setMessage("Invalid Move");
+            connections.notify(user,error);
+            return;
+        }
         gameService.updateBoard(gameID,chessGame);
         GameData gameData = gameService.getGame(gameID);
         var gameNotification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);

@@ -45,10 +45,10 @@ public class WebSocketHandler{
             case CONNECT -> connect(command.getAuthToken(), command.getGameID(), session);
             case LEAVE -> leave(command.getAuthToken(),command.getGameID(),session);
             case MAKE_MOVE -> makeMove(command.getAuthToken(),command.getGameID(),command.getMove(),session);
-            case RESIGN -> resign(command.getAuthToken(),command.getGameID());
+            case RESIGN -> resign(command.getAuthToken(),command.getGameID(),session);
         }
     }
-    public void resign(String authToken,int gameID) throws Exception {
+    public void resign(String authToken,int gameID, Session session) throws Exception {
         String user = null;
         var errorMessage = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
         try{
@@ -60,19 +60,19 @@ public class WebSocketHandler{
         GameData game = gameService.getGame(gameID);
         if(game.game().isGameComplete()){
             errorMessage.setErrorMessage("Game is over cannot resign");
-            connections.notify(user,errorMessage,gameID);
+            connections.notify(user,errorMessage,gameID,session);
             return;
         }
         if(!Objects.equals(user, game.blackUsername()) && !Objects.equals(user, game.whiteUsername())){
             errorMessage.setErrorMessage("Observer cannot resign");
-            connections.notify(user,errorMessage,gameID);
+            connections.notify(user,errorMessage,gameID,session);
             return;
         }
         game.game().completeGame();
         gameService.updateBoard(gameID,game.game());
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
         notification.setMessage(String.format("%s has resigned",user));
-        connections.notify(user,notification,gameID);
+        connections.notify(user,notification,gameID,session);
         connections.broadcast(user,notification,gameID);
     }
     public void makeMove(String authToken, int gameID, ChessMove move, Session session) throws Exception {
@@ -90,7 +90,7 @@ public class WebSocketHandler{
         }catch (Exception ex){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
             error.setErrorMessage("Observers cannot make moves");
-            connections.notify(user,error,gameID);
+            connections.notify(user,error,gameID,session);
             return;
         }
             ChessGame.TeamColor opponentColor;
@@ -104,7 +104,7 @@ public class WebSocketHandler{
         if(gameService.getGame(gameID).game().getTeamTurn() != teamColor){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
             error.setErrorMessage("Not your turn move failed");
-            connections.notify(user,error,gameID);
+            connections.notify(user,error,gameID,session);
             return;
         }
         try{
@@ -112,20 +112,20 @@ public class WebSocketHandler{
         }catch (Exception ex){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
             error.setErrorMessage("Invalid Move");
-            connections.notify(user,error,gameID);
+            connections.notify(user,error,gameID,session);
             return;
         }
         if(chessGame.isGameComplete()){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
             error.setErrorMessage("Game is complete cannot move");
-            connections.notify(user,error,gameID);
+            connections.notify(user,error,gameID,session);
             return;
         }
         gameService.updateBoard(gameID,chessGame);
         GameData gameData = gameService.getGame(gameID);
         var gameNotification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
         gameNotification.updateGame(gameData);
-        connections.notify(user,gameNotification,gameID);
+        connections.notify(user,gameNotification,gameID,session);
         connections.broadcast(user,gameNotification,gameID);
         var moveMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
         moveMessage.setMessage(move.toString());
@@ -134,17 +134,17 @@ public class WebSocketHandler{
            var message = String.format("%s is in checkmate",opponentColor);
            moveMessage.setMessage(message);
            connections.broadcast(user,moveMessage,gameID);
-           connections.notify(user,moveMessage,gameID);
+           connections.notify(user,moveMessage,gameID,session);
         }
         else if(chessGame.isInStalemate(opponentColor)){
             moveMessage.setMessage("Game is in Stalemate");
-            connections.notify(user,moveMessage,gameID);
+            connections.notify(user,moveMessage,gameID,session);
             connections.broadcast(user,moveMessage,gameID);
         }
         else if(chessGame.isInCheck(opponentColor)){
             var checkMessage = String.format("%s is in check",opponentColor);
             moveMessage.setMessage(checkMessage);
-            connections.notify(user,moveMessage,gameID);
+            connections.notify(user,moveMessage,gameID,session);
             connections.broadcast(user,moveMessage,gameID);
         }
 
@@ -191,7 +191,7 @@ public class WebSocketHandler{
         notification.setMessage(message);
         var gameNotification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME);
         gameNotification.updateGame(game);
-        connections.notify(user,gameNotification,gameID);
+        connections.notify(user,gameNotification,gameID,session);
         connections.broadcast(user,notification,gameID);
 
     }

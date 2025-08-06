@@ -21,9 +21,9 @@ public class ConnectionManager {
         connections.put(makeKey(visitorName, gameID), connection);
     }
 
-    public void notify(String username, ServerMessage message, int gameID) throws Exception {
+    public void notify(String username, ServerMessage message, int gameID, Session session) throws Exception {
         var conn = connections.get(makeKey(username, gameID));
-        if (conn != null && conn.session.isOpen()) {
+        if (conn != null && conn.session.isOpen() && gameID == Objects.requireNonNull(conn).gameID) {
             conn.send(new Gson().toJson(message));
         }
     }
@@ -47,9 +47,6 @@ public class ConnectionManager {
             } else {
                 removeList.add(entry.getKey());
             }
-        }
-        for (var key : removeList) {
-            connections.remove(key);
         }
     }
 }

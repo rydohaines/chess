@@ -13,11 +13,17 @@ import java.util.Objects;
 public class ChessGame {
 private  ChessBoard gameBoard = new ChessBoard();
 private TeamColor turnColor;
+private boolean gameComplete = false;
     public ChessGame() {
     gameBoard.resetBoard();
     setTeamTurn(TeamColor.WHITE);
     }
-
+    public void completeGame(){
+        gameComplete = true;
+    }
+    public boolean isGameComplete(){
+        return gameComplete;
+    }
     /**
      * @return Which team's turn it is
      */

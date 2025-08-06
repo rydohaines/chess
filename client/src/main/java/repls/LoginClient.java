@@ -58,8 +58,8 @@ public class LoginClient implements Client {
             return """
                     leave - the game
                     redraw - the chess board
-                    move <ROW,COL> <ROW,COL> <PROMOTION_PIECE>- make a chess move, and promotion if applicable. Type no if no promotion piece.
-                    highlight <ROW> <COL> - highlight possible moves 
+                    move <COLROW> <COLROW> <PROMOTION_PIECE>- make a chess move, and promotion if applicable.
+                    highlight <COLROW> - highlight possible moves 
                     resign - forfeit the game
                     help - see possible commands
                     """;
@@ -83,11 +83,17 @@ public class LoginClient implements Client {
                 case "leave" -> leave();
                 case "redraw" -> redraw();
                 case "move" ->move(params);
+                case"resign" -> resign();
                 default -> help();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+    private String resign() throws Exception {
+        assertGameState();
+        ws.resign(authToken,currGameID);
+        return "";
     }
     private String move(String... params) throws Exception {
         assertGameState();

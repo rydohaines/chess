@@ -123,7 +123,9 @@ public class BoardDrawer {
     }
 
     private static String toString(ChessPiece piece) {
-        if (piece == null) return "   ";
+        if (piece == null) {
+            return "   ";
+        }
         ChessGame.TeamColor color = piece.getTeamColor();
         ChessPiece.PieceType type = piece.getPieceType();
         return switch (type) {

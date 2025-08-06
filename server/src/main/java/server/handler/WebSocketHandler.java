@@ -21,6 +21,9 @@ import javax.management.Notification;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import static chess.ChessGame.TeamColor.BLACK;
+import static chess.ChessGame.TeamColor.WHITE;
+
 @WebSocket
 public class WebSocketHandler{
     private final ConnectionManager connections = new ConnectionManager();
@@ -45,6 +48,13 @@ public class WebSocketHandler{
     public void makeMove(String authToken, int gameID, ChessMove move, Session session) throws Exception {
         String user = userService.getAuthDataAccess().getUser(authToken);
         ChessGame.TeamColor teamColor = gameService.getTeamColor(user,gameID);
+        ChessGame.TeamColor opponentColor;
+        if(teamColor == WHITE){
+            opponentColor = BLACK;
+        }
+        else{
+            opponentColor= WHITE;
+        }
         ChessGame chessGame = gameService.getGame(gameID).game();
         if(gameService.getGame(gameID).game().getTeamTurn() != teamColor){
             var error = new ServerMessage(ServerMessage.ServerMessageType.ERROR);
@@ -62,6 +72,23 @@ public class WebSocketHandler{
         var moveMessage = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
         moveMessage.setMessage(move.toString());
         connections.broadcast(user,moveMessage);
+        if(chessGame.isInCheckmate(opponentColor)){
+           var message = String.format("%s is in checkmate",opponentColor);
+           moveMessage.setMessage(message);
+           connections.broadcast(user,moveMessage);
+           connections.notify(user,moveMessage);
+        }
+        else if(chessGame.isInStalemate(opponentColor)){
+            moveMessage.setMessage("Game is in Stalemate");
+            connections.notify(user,moveMessage);
+            connections.broadcast(user,moveMessage);
+        }
+        else if(chessGame.isInCheck(opponentColor)){
+            var checkMessage = String.format("%s is in check",opponentColor);
+            moveMessage.setMessage(checkMessage);
+            connections.notify(user,moveMessage);
+            connections.broadcast(user,moveMessage);
+        }
     }
     public void leave(String authToken, int gameID, Session session) throws Exception{
         String user = userService.getAuthDataAccess().getUser(authToken);
